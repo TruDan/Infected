@@ -1,0 +1,29 @@
+# Default Abilities.yml, Last Edited in v1.8.3
+# Chances works like this: All chances are added up and a random number is chosen out of the numbers
+# Regular is the default zombie, it applies an effect for 1 second
+Abilities:
+   Regular:
+      Chance: 100
+      Potion Effects:
+      - "1:1:1"
+   Tank:
+      Chance: 30
+      Potion Effects:
+      - "11:300:2"
+   Runner:
+      Chance: 30
+      Potion Effects:
+      - "1:300:2"
+   Hunter:
+      Chance: 15
+      Potion Effects:
+      - "14:300:2"
+      - "8:300:1"
+   Ghost:
+      Chance: 20
+      Potion Effects:
+      - "14:300:1"
+   Demon:
+      Chance: 20
+      Potion Effects:
+      - "5:300:1"

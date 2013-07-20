@@ -1,0 +1,56 @@
+# Default Grenades.yml, Last Edited in v1.7
+# Any grenades not set up like the following examples will cause errors!
+Use: true
+Can Only Humans Use Grenades: false
+# Modify what item the grenade should be.
+341:
+# What should the grenade be called?
+  Name: Stun
+# How much should this grenade cost in the shop?
+  Cost: 20
+# How many seconds should it be before the grenade takes effect?
+  Delay: 3
+# How far should the grenades explosion range be?
+  Range: 3
+# How much damage should this grenade cause?
+  Damage: 1
+# Should I remove the item after the player throws it?
+  Take After Thrown: true
+# Does the grenade damage the thrower if in range?
+  Damage Self: true
+# Potion effects.
+# To apply a potion effect, use this format: "PotionEffectID:duration-in-seconds:power"
+  Effects:
+  - "2:5:3"
+  - "15:1:2"
+332:
+  Name: Flash
+  Cost: 20
+  Delay: 3
+  Range: 3
+  Damage: 1
+  Take After Thrown: true
+  Damage Self: true
+  Effects:
+  - "2:1:2"
+  - "15:5:3"
+385:
+  Name: Frag
+  Cost: 25
+  Delay: 3
+  Range: 4
+  Damage: 10
+  Take After Thrown: true
+  Damage Self: true
+  Effects:
+  - "2:1:1"
+55:
+  Name: Health
+  Cost: 30
+  Delay: 1
+  Range: 2
+  Damage: -10
+  Take After Thrown: true
+  Damage Self: true
+  Effects:
+  - "15:1:1"

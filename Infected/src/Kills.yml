@@ -1,0 +1,23 @@
+# Default Kills.yml, Last Edited in v1.8.2
+# Killstreaks: Kills Needed: Command to trigger
+# What can be said when they kill the opposite(NO CAPS FOR GROUP NAMES)
+# Zombie: <zombie> ate <Player>
+Humans:
+- <human> &6has slayed <zombie>
+- <human> &6has killed <zombie>
+- <human> &6has impaled <zombie>
+- <human> &6has shot <zombie>
+- <human> &6has bombarded <zombie>
+- <human> &6has blew up <zombie>
+- <human> &6has decapitated <zombie>
+- <human> &6has sliced <zombie> into hundreds of peices
+- <human> &6has looked at <zombie>, and killed them...
+Zombies:
+- <zombie> &6bit <human>
+- <zombie> &6ripped off <human>'s head
+- <zombie> &6ate <human>
+- <zombie> &6killed <human>
+- <zombie> &6infected <human>
+- <zombie> &6scratched <human>
+KillStreaks:
+   20: give <player> 276 1

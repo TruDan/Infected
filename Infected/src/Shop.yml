@@ -1,0 +1,15 @@
+# Default Shop.yml, Last Edited in v1.8.2
+# Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
+# Should shop signs be enabled?
+Use: true
+# Should we save EVERY item a play buys from shop signs
+Save Items: false
+# These items will be saved regardless of the option above
+Save These Items No Matter What:
+- 827
+- 991
+- 0
+# Create custom items below
+# Custom Item Name: Item info (ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel)
+StackOfArrow: 262,64
+BowOfKick: 261-49@2

@@ -1,0 +1,68 @@
+# Default Infected Config, Last edited in 1.8.2
+# Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
+
+Check For Updates: true
+Download Update Regardless of CB Version: false
+DisguiseCraft Support: false
+ScoreBoard Support: false
+Zombie Abilities: false
+Book For Help: true
+Info Signs:
+  Enabled: true
+  Refresh Time: 2
+Prevent Joining During Game: false
+Allowed Commands:
+- /list
+- /tell
+Allow Breaking Certain Blocks: true
+Use Zombie Movement Effects: true
+Disable Hunger: true
+Disable Enchanting: true
+Allow Interacting: true
+Allow Votes: true
+New Zombie Tp: false
+Chance To Be Pig Zombie: 20
+Chance To Be NPC Zombie: 20
+Automatic Start:
+  Use: true
+  Minimum Players: 3
+Time:
+  Voting Time: 30
+  Alpha Zombie Infection: 20
+  Game Time Limit: 480
+Points:
+  Use: true
+  Max Points: 10000
+  Survive: 3
+  Zombies Infected: 3
+  Kill: 2
+  Game Over: 10
+Score:
+  Use: true
+  Max Score: 10000
+  Survive: 3
+  Zombies Infected: 3
+  Kill: 2
+  Game Over: 10
+Armor:
+  Human:
+    Head: '298'
+    Chest: '299'
+    Legs: '300'
+    Feet: '301'
+    Items:
+    - 272-34@100
+    - '261'
+    - 262,64
+  Zombie:
+    Head: 392:2-5@1
+    Chest: '303'
+    Legs: '304'
+    Feet: '305'
+    Items:
+    - 272-34@100
+Rewards:
+- 351:2,3
+- 265,2
+Command Reward: tell <player> you have won!
+Lobby: World,-439,135,55,-308.82898,11.015873

@@ -1,0 +1,50 @@
+name: Infected
+main: me.xxsniperzzxx_sd.infected.Main
+author: xXSniperzzXx_SD
+version: 1.8.5
+description: MW3 Infected for Minecraft!
+softdepend: [DisguiseCraft, TagApi, ProtocolLib]
+website: www.Youtube.com/user/SNiPERzCiinema
+commands:
+    Infected:
+       description: Infected Help Menu
+       usage: /<command>
+       aliases: [/i, inf]
+permissions:
+    infected.stats.other:
+        default: false
+        children:
+            infected.stats: true
+    infected.chat.spy:
+        default: false
+        children:
+            infected.chat: true
+    infected.admin:
+        default: false
+        children:
+            infected.chat.spy: true
+            infected.stats.other: true
+            infected.join: true
+            infected.force: true
+    infected.join:
+        default: true
+        children:
+            Infected.top: true
+            infected.list: true
+            infected.arenas: true
+            infected.stats: true
+            infected.grenades: true
+            infected.shop: true
+            infected.chat: true
+            infected.info: true
+            infected.suicide: true
+    infected.*:
+        default: op
+        children:
+            infected.shutdown: true
+            infected.admin: true
+            infected.setup: true
+            infected.join: true
+            infected.force: true
+            infected.config: true
+            infected.stats.other: true
