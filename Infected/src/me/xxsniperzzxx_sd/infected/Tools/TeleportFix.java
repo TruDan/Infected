@@ -20,12 +20,12 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class TeleportFix implements Listener
 {
     public Main plugin;
-    private Server server;
+    private static Server server;
     private final int TELEPORT_FIX_DELAY = 20; // ticks
     public TeleportFix(Main plugin, Server server)
     {
         this.plugin = plugin;
-        this.server = server;
+        TeleportFix.server = server;
     }@
     EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event)
@@ -49,7 +49,7 @@ public class TeleportFix implements Listener
             }
         }
     }
-    public void updateEntities(List < Player > observers)
+    public static void updateEntities(List < Player > observers)
     {
         // Refresh every single player
         for (Player player: observers)
@@ -58,7 +58,7 @@ public class TeleportFix implements Listener
         }
     }@
     SuppressWarnings("unchecked")
-    public void updateEntity(Entity entity, List < Player > observers)
+    public static void updateEntity(Entity entity, List < Player > observers)
     {
         World world = entity.getWorld();
         WorldServer worldServer = ((CraftWorld) world).getHandle();
@@ -73,7 +73,7 @@ public class TeleportFix implements Listener
             entry.scanPlayers(nmsPlayers);
         }
     }
-    private List < EntityPlayer > getNmsPlayers(List < Player > players)
+    private static List < EntityPlayer > getNmsPlayers(List < Player > players)
     {
         List < EntityPlayer > nsmPlayers = new ArrayList < EntityPlayer > ();
         for (Player bukkitPlayer: players)
@@ -83,7 +83,7 @@ public class TeleportFix implements Listener
         }
         return nsmPlayers;
     }
-    private List < Player > getPlayersWithin(Player player, int distance)
+    public static List < Player > getPlayersWithin(Player player, int distance)
     {
         List < Player > res = new ArrayList < Player > ();
         int d2 = distance * distance;

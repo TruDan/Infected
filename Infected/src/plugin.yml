@@ -26,6 +26,7 @@ permissions:
             infected.stats.other: true
             infected.join: true
             infected.force: true
+            infected.refresh: true
     infected.join:
         default: true
         children:

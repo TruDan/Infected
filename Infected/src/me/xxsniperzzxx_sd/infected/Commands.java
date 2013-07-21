@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedPlayerJoinEvent;
 import me.xxsniperzzxx_sd.infected.Tools.Files;
+import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -243,8 +244,25 @@ public class Commands implements CommandExecutor
                     return true;
                 }
 
+                ///////////////////////////////////////////////////////////////////////////////////////////Refresh
+                else if(args[0].equalsIgnoreCase("Refresh"))
+                {
+
+                    if (!sender.hasPermission("Infected.Refresh"))
+                    {
+                        sender.sendMessage(Methods.sendMessage("Error_NoPermission", null, null, null));
+                        return true;
+                    }
+                    for(Player playing : Bukkit.getOnlinePlayers()){
+                    	if(plugin.inGame.contains(playing.getName()) || plugin.inLobby.contains(playing.getName())){
+                    		TeleportFix.updateEntities(TeleportFix.getPlayersWithin(playing, Bukkit.getServer().getViewDistance() * 16));
+                    	}
+                    }
+                    sender.sendMessage("Refreshed all the players everyone playing should see.");
+                }
                 ///////////////////////////////////////////////////////////////////////////////////////////INFO
-                else if(args[0].equalsIgnoreCase("Info")){
+                else if(args[0].equalsIgnoreCase("Info"))
+                {
 
                     if (!sender.hasPermission("Infected.Info"))
                     {
@@ -266,7 +284,8 @@ public class Commands implements CommandExecutor
                     sender.sendMessage("");
                 }
                     ///////////////////////////////////////////////////////////////////////////////////////////SUICIDE
-                    else if(args[0].equalsIgnoreCase("Suicide")){
+                    else if(args[0].equalsIgnoreCase("Suicide"))
+                    {
 
                     	if (!(sender instanceof Player))
                     	{
@@ -634,7 +653,7 @@ public class Commands implements CommandExecutor
                             pages.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " Infected Player\n" + "   Commands (3)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Info\n" + ChatColor.GOLD + " - See The current status\n");
                              if (player.hasPermission("Infected.SetUp")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Admin\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetLobby\n" + ChatColor.DARK_AQUA + " - Set the main lobby\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Create <Arena>\n" + ChatColor.DARK_AQUA + " - Create an arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Remove <Arena>\n" + ChatColor.DARK_AQUA + " - Remove an Arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetArena <Arena>\n" + ChatColor.DARK_AQUA + " - Select an arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetSpawn\n" + ChatColor.DARK_AQUA + " - Set the spawn");
                             if (player.hasPermission("Infected.SetUp")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Admin\n" + "   Commands (2)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "TpSpawn <ID>\n" + ChatColor.DARK_AQUA + " - Teleport to the spawn ID(Number)\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "DelSpawn <ID>\n" + ChatColor.DARK_AQUA + " - Remove the spawn ID(Number)\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Spawns\n" + ChatColor.DARK_AQUA + " - List how many spawns an arena has\n" + ChatColor.GREEN + " /Inf TpLobby" + ChatColor.DARK_GRAY + ". Tp to the lobby.\n");
-                            if (player.hasPermission("Infected.Force")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Force\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Start\n" + ChatColor.BLACK + " - Force the game to start\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "End\n" + ChatColor.BLACK + " - Force the game to end\n");
+                            if (player.hasPermission("Infected.Force")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Force\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Start\n" + ChatColor.BLACK + " - Force the game to start\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "End\n" + ChatColor.BLACK + " - Force the game to end\n"+ ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Refresh\n" + ChatColor.BLACK + " - Force all the players to refresh eachother\n");
                             if (player.hasPermission("Infected.Admin")) pages.add(ChatColor.GREEN + "" + ChatColor.BOLD + " Infected Admin\n" + "       Menu" + "\n\n" + ChatColor.AQUA + "/Inf Admin Points <Player> <#>\n" + ChatColor.BLACK + "/Inf Admin Score <Player> <#>\n" + ChatColor.BLUE + "/Inf Admin KStats <Player> <#>\n" + ChatColor.DARK_AQUA + "/Inf Admin DStats <Player> <#>\n" + ChatColor.DARK_BLUE + "/Inf Admin Restore <Player>\n" + ChatColor.DARK_GREEN + "/Inf Admin Kick <Player>\n" + ChatColor.DARK_BLUE + "/Inf Admin Reload\n");
                             if (player.hasPermission("Infected.Admin")) pages.add(ChatColor.GREEN + "" + ChatColor.BOLD + " Infected Admin\n" + "     Menu (2)" + "\n\n" + ChatColor.DARK_PURPLE + "/Inf Admin Reset <Player>\n" + ChatColor.GOLD + "/Inf Admin Shutdown\n");
                             if (player.hasPermission("Infected.SetUp")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " How To Set Up \n" + "     Infected" + "\n\n" + ChatColor.RED + "1. " + ChatColor.DARK_GRAY + "Build a lobby\n" + ChatColor.RED + "2. " + ChatColor.DARK_GRAY + "Set the lobby spawn point where you're standing using the" + ChatColor.GREEN + " /Inf SetLobby" + ChatColor.DARK_GRAY + " command\n" + ChatColor.RED + "3. " + ChatColor.DARK_GRAY + "Build an arena\n");
@@ -1071,6 +1090,7 @@ public class Commands implements CommandExecutor
                     if (player.hasPermission("Infected.Force")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Start" + ChatColor.WHITE + " - Force the game to start");
                     if (player.hasPermission("Infected.Force")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "End" + ChatColor.WHITE + " - Force the game to end");
                     if (player.hasPermission("Infected.Admin")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Admin" + ChatColor.WHITE + " - Show the admin menu");
+                    if (player.hasPermission("Infected.Admin")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Refresh" + ChatColor.WHITE + " - Refresh all the players");
                     player.sendMessage("");
                     return true;
                 }
