@@ -1090,6 +1090,8 @@ public class PlayerListener implements Listener
                         }, delay);
                     }
                 }
+                event.setCancelled(true);
+                event.setUseInteractedBlock(Result.DENY);
                 event.setUseItemInHand(Result.DENY);
             }
         }
@@ -1107,7 +1109,7 @@ public class PlayerListener implements Listener
                     player.sendMessage(Main.I + "Apperently i missed a way to die...");
                     player.sendMessage(Main.I + "Inform the author on how you died!");
                     player.sendMessage(Main.I + "http://www.dev.Bukkit.org/Server_Mods/Infected-Core");
-                    Methods.resetp(player);
+                    player.performCommand("Infected Leave");
                     player.performCommand("Infected Join");
                 }
 
