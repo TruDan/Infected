@@ -80,41 +80,6 @@ public class Files
             Bukkit.getLogger().log(Level.SEVERE, "Could not save config " + Main.abilitiesFile, ex);
         }
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void reloadConfig()
-    {
-        if (Main.configFile == null)
-            Main.configFile = new File(Bukkit.getPluginManager().getPlugin("Infected").getDataFolder(), "Config.yml");
-        Main.killT = YamlConfiguration.loadConfiguration(Main.configFile);
-        //Look for defaults in the jar
-        InputStream defConfigStream = Bukkit.getPluginManager().getPlugin("Infected").getResource("Config.yml");
-        if (defConfigStream != null)
-        {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            Main.customConfig.setDefaults(defConfig);
-        }
-    }
-    //Get Kills file
-    public static FileConfiguration getConfig()
-    {
-        if (Main.customConfig == null)
-            reloadConfig();
-        return Main.customConfig;
-    }
-    //Safe Kills File
-    public static void saveConfig()
-    {
-        if (Main.customConfig == null || Main.configFile == null)
-            return;
-        try
-        {
-            getConfig().save(Main.configFile);
-        }
-        catch (IOException ex)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Could not save config " + Main.configFile, ex);
-        }
-    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Reload Arenas File
     public static void reloadArenas()
