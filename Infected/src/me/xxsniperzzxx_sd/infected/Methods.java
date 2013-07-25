@@ -113,12 +113,9 @@ public class Methods
             }
         }
     }
-    public static void zombifyPlayer(Player player)
+    public static void disguisePlayer(Player player)
     {
-        if (Main.config.getBoolean("Zombie Abilities") == true)
-        {
-            applyAbilities(player);
-        }
+
         if (Main.config.getBoolean("DisguiseCraft Support") == true)
         {
             // https://gitorious.org/disguisecraft/disguisecraft/blobs/master/src/pgDev/bukkit/DisguiseCraft/disguise/Disguise.java#line234
@@ -150,8 +147,45 @@ public class Methods
                         System.out.println("Choosing new zombie: " + player.getName() + " = zombie");
                     }
                 }
+            }else{
+            	Main.dcAPI.undisguisePlayer(player);
+            	
+            	 if (chance <= Main.config.getInt("Chance To Be Pig Zombie"))
+                 {
+                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.PigZombie).addSingleData("noarmor"));
+                     if (Main.config.getBoolean("Debug"))
+                     {
+                         System.out.println("Choosing new zombie: " + player.getName() + " = pigzombie");
+                     }
+                 }
+                 else if (chance <= (Main.config.getInt("Chance To Be NPC Zombie") + Main.config.getInt("Chance To Be NPC Zombie")))
+                 {
+                     if (Main.config.getBoolean("Debug"))
+                     {
+                         System.out.println("Choosing new zombie: " + player.getName() + " = infected zombie");
+                     }
+                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("infected").addSingleData("noarmor"));
+                 }
+                 else
+                 {
+                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("noarmor"));
+                     if (Main.config.getBoolean("Debug"))
+                     {
+                         System.out.println("Choosing new zombie: " + player.getName() + " = zombie");
+                     }
+                 }
             }
         }
+    }
+    
+    public static void zombifyPlayer(Player player)
+    {
+        if (Main.config.getBoolean("Zombie Abilities") == true)
+        {
+            applyAbilities(player);
+        }
+        disguisePlayer(player);
+        
     }
     public static String grenadeGetName(Integer id)
     {

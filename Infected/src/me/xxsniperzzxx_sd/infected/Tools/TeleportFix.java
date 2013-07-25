@@ -2,6 +2,7 @@ package me.xxsniperzzxx_sd.infected.Tools;
 import java.util.ArrayList;
 import java.util.List;
 import me.xxsniperzzxx_sd.infected.Main;
+import me.xxsniperzzxx_sd.infected.Methods;
 import net.minecraft.server.v1_6_R2.EntityPlayer;
 import net.minecraft.server.v1_6_R2.EntityTracker;
 import net.minecraft.server.v1_6_R2.EntityTrackerEntry;
@@ -55,6 +56,8 @@ public class TeleportFix implements Listener
         for (Player player: observers)
         {
             updateEntity(player, observers);
+            if(Main.dcAPI.isDisguised(player))
+            	Methods.disguisePlayer(player);
         }
     }@
     SuppressWarnings("unchecked")
