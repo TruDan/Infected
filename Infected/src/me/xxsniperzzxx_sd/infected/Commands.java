@@ -181,6 +181,8 @@ public class Commands implements CommandExecutor
                     plugin.Winners.clear();
                     plugin.inLobby.add(player.getName());
                     plugin.gamemode.put(player.getName(), player.getGameMode().toString());
+                    if(Main.dcAPI.isDisguised(player))
+                    	Main.dcAPI.undisguisePlayer(player);
                     //Prepare player
                     player.setHealth(20);
                     player.setFoodLevel(20);

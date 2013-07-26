@@ -1046,10 +1046,8 @@ public class PlayerListener implements Listener
     SuppressWarnings("deprecation")@ EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerThrowEvent(PlayerInteractEvent event)
     {
-        if (!event.isCancelled())
-        {
-            final Player player = event.getPlayer();
-            if (Main.inGame.contains(player.getName()) && Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())))
+    	final Player player = event.getPlayer();
+    	if (Main.inGame.contains(player.getName()) && Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())))
             {
                 if (Infected.booleanIsStarted() && Files.getGrenades().getBoolean("Use"))
                 {
@@ -1094,7 +1092,6 @@ public class PlayerListener implements Listener
                 event.setUseInteractedBlock(Result.DENY);
                 event.setUseItemInHand(Result.DENY);
             }
-        }
     }@
     EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerRespawn(PlayerRespawnEvent event)

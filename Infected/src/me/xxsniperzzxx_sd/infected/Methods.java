@@ -305,6 +305,7 @@ public class Methods
         Main.Lasthit.remove(player.getName());
         player.setGameMode(GameMode.ADVENTURE);
         player.updateInventory();
+        player.setLevel(0);
         Main.Votes.clear();
         Main.inLobby.add(player.getName());
         Main.zombies.clear();
@@ -1313,6 +1314,7 @@ public class Methods
         World world = Bukkit.getServer().getWorld(floc[0]);
         Location Loc = new Location(world, Integer.valueOf(floc[1]), Integer.valueOf(floc[2]), Integer.valueOf(floc[3]), Float.valueOf(floc[4]), Float.valueOf(floc[5]));
         player.teleport(Loc);
+        Main.Lasthit.remove(player.getName());
         if (Main.config.getBoolean("ScoreBoard Support"))
         {
             updateScoreBoard();

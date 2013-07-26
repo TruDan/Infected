@@ -4,11 +4,13 @@ import java.util.Random;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedGameStartEvent;
 import me.xxsniperzzxx_sd.infected.Events.InfectedVoteStartEvent;
+import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -86,6 +88,15 @@ public class Game
                 {
                     timeleft -= 1;
                     Main.currentTime = timeleft;
+                    if(timeleft == 5 || timeleft == 4 ||timeleft == 3||timeleft == 2||timeleft == 1){
+                   	 for (Player playing: Bukkit.getServer().getOnlinePlayers())
+                        {
+                            if (Main.inGame.contains(playing.getName()))
+                            {
+                              playing.playSound(playing.getLocation(), Sound.NOTE_BASS_GUITAR, 1, 1);
+                            }
+                        }
+                   }
                     if (timeleft == 60 || timeleft == 50 || timeleft == 40 || timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 9 || timeleft == 8 || timeleft == 7 || timeleft == 6 || timeleft == 5 || timeleft == 4 || timeleft == 3 || timeleft == 2 || timeleft == 1)
                     {
                         for (Player playing: Bukkit.getServer().getOnlinePlayers())
@@ -195,6 +206,15 @@ public class Game
                                         {
                                             timeleft -= 1;
                                             Main.currentTime = timeleft;
+                                            if(timeleft == 5 || timeleft == 4 ||timeleft == 3||timeleft == 2||timeleft == 1){
+                                            	 for (Player playing: Bukkit.getServer().getOnlinePlayers())
+                                                 {
+                                                     if (Main.inGame.contains(playing.getName()))
+                                                     {
+                                                       playing.playSound(playing.getLocation(), Sound.NOTE_BASS_GUITAR, 1, 1);
+                                                     }
+                                                 }
+                                            }
                                             if (timeleft == 60 || timeleft == 50 || timeleft == 40 || timeleft == 30 || timeleft == 20 || timeleft == 10 || timeleft == 9 || timeleft == 8 || timeleft == 7 || timeleft == 6 || timeleft == 5 || timeleft == 4 || timeleft == 3 || timeleft == 2 || timeleft == 1)
                                             {
                                                 for (Player playing: Bukkit.getServer().getOnlinePlayers())
@@ -247,6 +267,21 @@ public class Game
                                                                 if (Main.inGame.contains(playing.getName()))
                                                                 	playing.setLevel(timeleft);
                                                             }
+                                                            if (Main.GtimeLimit - timeleft == 10)
+                                                                for(Player playing : Bukkit.getOnlinePlayers()){
+                                                                	if(Main.inGame.contains(playing.getName()) || Main.inLobby.contains(playing.getName())){
+                                                                		TeleportFix.updateEntities(TeleportFix.getPlayersWithin(playing, Bukkit.getServer().getViewDistance() * 16));
+                                                                	}
+                                                                }
+                                                            if(timeleft == 5 || timeleft == 4 ||timeleft == 3||timeleft == 2||timeleft == 1){
+                                                           	 for (Player playing: Bukkit.getServer().getOnlinePlayers())
+                                                                {
+                                                                    if (Main.inGame.contains(playing.getName()))
+                                                                    {
+                                                                      playing.playSound(playing.getLocation(), Sound.NOTE_BASS_GUITAR, 1, 1);
+                                                                    }
+                                                                }
+                                                           }
                                                             if (timeleft == (Main.GtimeLimit / 4) * 3 || timeleft == Main.GtimeLimit / 2 || timeleft == Main.GtimeLimit / 4 || timeleft == 60 || timeleft == 10 || timeleft == 9 || timeleft == 8 || timeleft == 7 || timeleft == 6 || timeleft == 5 || timeleft == 4 || timeleft == 3 || timeleft == 2 || timeleft == 1)
                                                             {
                                                                 for (Player playing: Bukkit.getServer().getOnlinePlayers())
