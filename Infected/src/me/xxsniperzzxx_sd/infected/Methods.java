@@ -149,31 +149,7 @@ public class Methods
                 }
             }else{
             	Main.dcAPI.undisguisePlayer(player);
-            	
-            	 if (chance <= Main.config.getInt("Chance To Be Pig Zombie"))
-                 {
-                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.PigZombie).addSingleData("noarmor"));
-                     if (Main.config.getBoolean("Debug"))
-                     {
-                         System.out.println("Choosing new zombie: " + player.getName() + " = pigzombie");
-                     }
-                 }
-                 else if (chance <= (Main.config.getInt("Chance To Be NPC Zombie") + Main.config.getInt("Chance To Be NPC Zombie")))
-                 {
-                     if (Main.config.getBoolean("Debug"))
-                     {
-                         System.out.println("Choosing new zombie: " + player.getName() + " = infected zombie");
-                     }
-                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("infected").addSingleData("noarmor"));
-                 }
-                 else
-                 {
-                     Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("noarmor"));
-                     if (Main.config.getBoolean("Debug"))
-                     {
-                         System.out.println("Choosing new zombie: " + player.getName() + " = zombie");
-                     }
-                 }
+            	disguisePlayer(player);
             }
         }
     }
@@ -311,7 +287,7 @@ public class Methods
         Main.zombies.clear();
         Main.humans.clear();
         player.setFireTicks(0);
-        player.setHealth(20);
+        player.setHealth(20.0);
         player.setFoodLevel(20);
         Main.KillStreaks.remove(player.getName());
         Main.Booleans.put("Started", false);
@@ -1135,7 +1111,7 @@ public class Methods
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
             player.setScoreboard(board);
         }
-        player.setHealth(20);
+        player.setHealth(20.0);
         player.setFoodLevel(20);
         for (PotionEffect reffect: player.getActivePotionEffects())
         {
@@ -1304,7 +1280,7 @@ public class Methods
     }
     public static void respawn(Player player)
     {
-        player.setHealth(20);
+        player.setHealth(20.0);
         player.setFoodLevel(20);
         player.setFireTicks(0);
         Random r = new Random();

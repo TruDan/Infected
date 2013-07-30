@@ -184,7 +184,8 @@ public class Commands implements CommandExecutor
                     if(Main.dcAPI.isDisguised(player))
                     	Main.dcAPI.undisguisePlayer(player);
                     //Prepare player
-                    player.setHealth(20);
+                    player.setMaxHealth(20.0);
+                    player.setHealth(20.0);
                     player.setFoodLevel(20);
                     Methods.resetPlayersInventory(player);
                     if (Infected.filesGetShop().getBoolean("Save Items") && Infected.playerGetShopInventory(player) != null) player.getInventory().setContents(Infected.playerGetShopInventory(player));
@@ -211,6 +212,7 @@ public class Commands implements CommandExecutor
                     }
                     if (Started)
                     {
+                        player.setGameMode(GameMode.SURVIVAL);
                         Methods.joinInfectHuman(player);
                         Infected.delPlayerInLobby(player);
                         if (Main.config.getBoolean("ScoreBoard Support"))
@@ -224,6 +226,7 @@ public class Commands implements CommandExecutor
                     {
                         if (Main.config.getBoolean("ScoreBoard Support"))
                         {
+                            player.setGameMode(GameMode.SURVIVAL);
                             player.setScoreboard(Main.playingBoard);
                             Methods.updateScoreBoard();
                         }
@@ -235,7 +238,7 @@ public class Commands implements CommandExecutor
                         Main.Timein.put(player.getName(), System.currentTimeMillis() / 1000);
                         if (!plugin.KillStreaks.containsKey(player.getName()))
                             plugin.KillStreaks.put(player.getName(), Integer.valueOf("0"));
-                        player.setHealth(20);
+                        player.setHealth(20.0);
                         player.setFoodLevel(20);
                         player.playEffect(player.getLocation(), Effect.SMOKE, 1);
                         Methods.equipHumans(player);
@@ -310,7 +313,7 @@ public class Commands implements CommandExecutor
 	                	player.sendMessage(plugin.I + "You have become infected!");
 	                	player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20, 2));
 	                	Methods.equipZombies(player);
-	                	player.setHealth(20);
+	                	player.setHealth(20.0);
 	                	player.setFoodLevel(20);
 	                	Methods.stats(player, 0, 1);
 	                	if (plugin.KillStreaks.get(player.getName()) > Files.getPlayers().getInt("Players." + player.getName().toLowerCase() + ".KillStreak"))

@@ -14,6 +14,9 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
+import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
+
 public class Game
 {
 
@@ -268,8 +271,10 @@ public class Game
                                                                 	playing.setLevel(timeleft);
                                                             }
                                                             if (Main.GtimeLimit - timeleft == 10)
-                                                                for(Player playing : Bukkit.getOnlinePlayers()){
+                                                                for(final Player playing : Bukkit.getOnlinePlayers()){
                                                                 	if(Main.inGame.contains(playing.getName()) || Main.inLobby.contains(playing.getName())){
+
+                                                                        
                                                                 		TeleportFix.updateEntities(TeleportFix.getPlayersWithin(playing, Bukkit.getServer().getViewDistance() * 16));
                                                                 	}
                                                                 }

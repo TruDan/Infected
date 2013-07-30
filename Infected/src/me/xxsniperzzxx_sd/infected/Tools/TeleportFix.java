@@ -18,6 +18,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+
+import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
+import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
 public class TeleportFix implements Listener
 {
     public Main plugin;
@@ -53,11 +56,30 @@ public class TeleportFix implements Listener
     public static void updateEntities(List < Player > observers)
     {
         // Refresh every single player
-        for (Player player: observers)
+        for (final Player player: observers)
         {
-            updateEntity(player, observers);
-            if(Main.dcAPI.isDisguised(player))
-            	Methods.disguisePlayer(player);
+        	if(Main.inGame.contains(player.getName()) || Main.inLobby.contains(player.getName())){
+
+	            updateEntity(player, observers);
+	            if(Main.dcAPI.isDisguised(player))
+	            	Methods.disguisePlayer(player);
+	            if (Main.config.getBoolean("DisguiseCraft Support") == true)
+	            {
+	            	 Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Chicken));
+	            	 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.me, new Runnable()
+	                 {@
+	                     Override
+	                     public void run()
+	                     {
+	
+	                 	Main.dcAPI.undisguisePlayer(player);
+	                 	if(Main.zombies.contains(player.getName()))
+	    	            	Methods.disguisePlayer(player);
+	                     }
+	
+	                 }, 2L); 
+	            }
+            }
         }
     }@
     SuppressWarnings("unchecked")
