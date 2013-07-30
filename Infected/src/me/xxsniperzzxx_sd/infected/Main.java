@@ -70,7 +70,6 @@ public class Main extends JavaPlugin
     public static ArrayList < String > zombies = new ArrayList < String > ();
     public static ArrayList < String > humans = new ArrayList < String > ();
     public static ArrayList < String > inGame = new ArrayList < String > ();
-    public static ArrayList < String > waiting = new ArrayList < String > ();
     public static HashMap < String, Integer > Leaders = new HashMap < String, Integer > ();
     public static HashMap < String, Boolean > Booleans = new HashMap < String, Boolean > ();
     public static HashMap < String, Long > Timein = new HashMap < String, Long > ();

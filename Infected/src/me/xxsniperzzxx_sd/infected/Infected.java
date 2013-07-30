@@ -175,26 +175,6 @@ public class Infected
     {
         Main.Winners.add(player.getName());
     }
-    public static ArrayList < String > gameWaiting()
-    {
-        return Main.waiting;
-    }
-    public static boolean gameisWaiting(Player player)
-    {
-        return Main.waiting.contains(player.getName());
-    }
-    public static void gameDelWaiting(Player player)
-    {
-        Main.waiting.remove(player.getName());
-    }
-    public static void gameClearWaiting(Player player)
-    {
-        Main.waiting.clear();
-    }
-    public static void gameAddWaiting(Player player)
-    {
-        Main.waiting.add(player.getName());
-    }
     public static boolean playerHasPlayed(Player player)
     {
         return Files.getPlayers().contains(player.getName().toLowerCase());

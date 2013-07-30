@@ -1019,19 +1019,7 @@ public class Methods
                     Methods.tp2LobbyAfter(players);
                 }
         }
-        for (Player players: Bukkit.getOnlinePlayers())
-        {
-            if (Main.waiting.contains(players.getName()))
-            {
-                players.setHealth(20);
-                players.setFoodLevel(20);
-                players.setFireTicks(0);
-                players.sendMessage(Main.I + ChatColor.YELLOW + "Infected has ended!");
-
-            }
-
-        }
-        Main.waiting.clear();
+        updateScoreBoard();
         Main.Winners.clear();
         if (Main.inGame.size() >= Main.config.getInt("Automatic Start.Minimum Players") && Infected.booleanIsStarted() == false && Infected.booleanIsBeforeGame() == false && Infected.booleanIsBeforeInfected() == false && Main.config.getBoolean("Automatic Start.Use"))
         {
