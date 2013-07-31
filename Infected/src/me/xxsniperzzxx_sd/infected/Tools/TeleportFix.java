@@ -61,8 +61,11 @@ public class TeleportFix implements Listener
         	if(Main.inGame.contains(player.getName()) || Main.inLobby.contains(player.getName())){
 
 	            updateEntity(player, observers);
-	            if(Main.dcAPI.isDisguised(player))
-	            	Methods.disguisePlayer(player);
+	            if (Main.config.getBoolean("DisguiseCraft Support") == true)
+	            {
+	            	if(Main.dcAPI.isDisguised(player))
+	            		Methods.disguisePlayer(player);
+	            }
 	            if (Main.config.getBoolean("DisguiseCraft Support") == true)
 	            {
 	            	 Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Chicken));
@@ -114,9 +117,17 @@ public class TeleportFix implements Listener
         int d2 = distance * distance;
         for (Player p: server.getOnlinePlayers())
         {
-            if ((!Main.dcAPI.isDisguised(p)) && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2)
-            {
-                res.add(p);
+
+            if (Main.config.getBoolean("DisguiseCraft Support")){
+            	if ((!Main.dcAPI.isDisguised(p)) && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2)
+                {
+                    res.add(p);
+                }
+            }else{
+                if (p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2)
+                {
+                    res.add(p);
+                }	
             }
         }
         return res;

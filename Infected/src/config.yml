@@ -55,7 +55,7 @@ Armor:
     - '261'
     - 262,64
   Zombie:
-    Head: 392:2-5@1
+    Head: 302:2-5@1
     Chest: '303'
     Legs: '304'
     Feet: '305'

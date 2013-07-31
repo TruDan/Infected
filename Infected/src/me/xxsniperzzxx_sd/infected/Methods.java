@@ -279,6 +279,7 @@ public class Methods
         resetPlayersInventory(player);
         if (Infected.filesGetShop().getBoolean("Save Items")) player.getInventory().setContents(Infected.playerGetShopInventory(player));
         Main.Lasthit.remove(player.getName());
+        Main.Classes.remove(player.getName());
         player.setGameMode(GameMode.ADVENTURE);
         player.updateInventory();
         player.setLevel(0);
@@ -592,15 +593,27 @@ public class Methods
     {
         if (Main.tagapi)
             TagAPI.refreshPlayer(human);
-        for (String s: Main.config.getStringList("Armor.Human.Items"))
-        {
-            human.getInventory().addItem(getItemStack(s));
-            human.updateInventory();
-        }
-        if (Main.config.getString("Armor.Human.Head") != null) human.getInventory().setHelmet(getItemStack(Main.config.getString("Armor.Human.Head")));
-        if (Main.config.getString("Armor.Human.Chest") != null) human.getInventory().setChestplate(getItemStack(Main.config.getString("Armor.Human.Chest")));
-        if (Main.config.getString("Armor.Human.Legs") != null) human.getInventory().setLeggings(getItemStack(Main.config.getString("Armor.Human.Legs")));
-        if (Main.config.getString("Armor.Human.Feet") != null) human.getInventory().setBoots(getItemStack(Main.config.getString("Armor.Human.Feet")));
+        if(Main.Classes.containsKey(human.getName())){
+        	for (String s: Infected.filesGetShop().getStringList("Classes."+Main.Classes.get(human.getName())+".Items"))
+	        {
+	            human.getInventory().addItem(getItemStack(s));
+	            human.updateInventory();
+	        }
+	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Head") != null) human.getInventory().setHelmet(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Head")));
+	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Chest") != null) human.getInventory().setChestplate(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Chest")));
+	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Legs") != null) human.getInventory().setLeggings(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Legs")));
+	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Feet") != null) human.getInventory().setBoots(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Feet")));
+        }else{
+	        for (String s: Main.config.getStringList("Armor.Human.Items"))
+	        {
+	            human.getInventory().addItem(getItemStack(s));
+	            human.updateInventory();
+	        }
+	        if (Main.config.getString("Armor.Human.Head") != null) human.getInventory().setHelmet(getItemStack(Main.config.getString("Armor.Human.Head")));
+	        if (Main.config.getString("Armor.Human.Chest") != null) human.getInventory().setChestplate(getItemStack(Main.config.getString("Armor.Human.Chest")));
+	        if (Main.config.getString("Armor.Human.Legs") != null) human.getInventory().setLeggings(getItemStack(Main.config.getString("Armor.Human.Legs")));
+	        if (Main.config.getString("Armor.Human.Feet") != null) human.getInventory().setBoots(getItemStack(Main.config.getString("Armor.Human.Feet")));
+	        }
         human.updateInventory();
     }@
     SuppressWarnings("deprecation")
@@ -610,12 +623,23 @@ public class Methods
         if (Main.tagapi)
             TagAPI.refreshPlayer(zombie);
         //Give infected their armor
+
         for (String s: Main.config.getStringList("Armor.Human.Items"))
         {
             if (zombie.getInventory().contains(getItem(s).getType()))
             {
                 zombie.getInventory().remove(getItem(s).getType());
             }
+        }
+        
+        if(Main.Classes.containsKey(zombie.getName())){
+        	for (String s: Infected.filesGetShop().getStringList("Classes."+Main.Classes.get(zombie.getName())+".Items"))
+	        {
+	            if (zombie.getInventory().contains(getItem(s).getType()))
+	            {
+	                zombie.getInventory().remove(getItem(s).getType());
+	            }
+	        }
         }
         for (ItemStack armor: zombie.getInventory().getArmorContents())
         {
@@ -810,7 +834,7 @@ public class Methods
         if (Path.contains("%"))
         {
             String[] ss = Path.split("%");
-            itemName = ss[1];
+            itemName = ChatColor.translateAlternateColorCodes('&', ss[1]);
         }
         else
         {
@@ -1117,6 +1141,7 @@ public class Methods
         if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
         if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
         if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
+        if (Main.Classes.containsKey(player.getName())) Main.Classes.remove(player.getName());
         Main.inLobby.remove(player.getName());
         Main.zombies.remove(player.getName());
         Main.KillStreaks.remove(player.getName());
@@ -1159,6 +1184,7 @@ public class Methods
         Main.KillStreaks.clear();
         Main.possibleArenas.clear();
         Main.inLobby.clear();
+        Main.Classes.clear();
         Main.Winners.clear();
         Main.zombies.clear();
         Main.humans.clear();

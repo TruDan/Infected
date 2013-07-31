@@ -9,7 +9,16 @@ Save These Items No Matter What:
 - 827
 - 991
 - 0
+Classes:
+  Grenader:
+    Head: '298'
+    Chest: '303'
+    Legs: '300'
+    Feet: '305'
+    Items:
+    - '385,5%&3Grenade'
+    - '259'
 # Create custom items below
-# Custom Item Name: Item info (ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel)
+# Custom Item Name: Item info (ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name)
 StackOfArrow: 262,64
 BowOfKick: 261-49@2

@@ -181,8 +181,9 @@ public class Commands implements CommandExecutor
                     plugin.Winners.clear();
                     plugin.inLobby.add(player.getName());
                     plugin.gamemode.put(player.getName(), player.getGameMode().toString());
-                    if(Main.dcAPI.isDisguised(player))
-                    	Main.dcAPI.undisguisePlayer(player);
+                    if (Main.config.getBoolean("DisguiseCraft Support"))
+                    	if(Main.dcAPI.isDisguised(player))
+                    		Main.dcAPI.undisguisePlayer(player);
                     //Prepare player
                     player.setMaxHealth(20.0);
                     player.setHealth(20.0);
@@ -306,6 +307,12 @@ public class Commands implements CommandExecutor
 
                     if (plugin.inGame.contains(player.getName()))
                     {
+	                	if(Main.humans.contains(player))
+		                    for (Player playing: Bukkit.getServer().getOnlinePlayers())
+		                    {
+		                        if ((!(playing == player)) && Main.inGame.contains(playing.getName()))
+		                            playing.sendMessage(Methods.sendMessage("Game_GotInfected", player, null, null));
+		                    }
 	                	plugin.humans.remove(player.getName());
 	                	if(!plugin.zombies.contains(player.getName())) plugin.zombies.add(player.getName());
 	                	plugin.Winners.remove(player.getName());
@@ -323,13 +330,7 @@ public class Commands implements CommandExecutor
 	                	}
 	
 	                	plugin.KillStreaks.put(player.getName(), 0);
-	
-	                    for (Player playing: Bukkit.getServer().getOnlinePlayers())
-	                    {
-	                        if ((!(playing == player)) && Main.inGame.contains(playing.getName()))
-	                            playing.sendMessage(Methods.sendMessage("Game_GotInfected", player, null, null));
-	                    }
-	                     
+
 	                     if (plugin.humans.size() == 0)
 	                     {
 	                    	 Methods.endGame(false);
@@ -1187,13 +1188,13 @@ public class Commands implements CommandExecutor
                         return true;
                     }
                     List < String > list = Infected.filesGetArenas().getStringList("Arenas." + Main.Creating.get(sender.getName()) + ".Spawns");
-                    int i = Integer.valueOf(args[1]) + 1;
+                    int i = Integer.valueOf(args[1]) - 1;
                     if (!(list.get(i) == null))
                     {
                         list.remove(i);
                         Infected.filesGetArenas().set("Arenas." + Main.Creating.get(sender.getName()) + ".Spawns", list);
                         Infected.filesSaveArenas();
-                        sender.sendMessage(plugin.I + ChatColor.RED + "You have removed spawn number " + i + ".");
+                        sender.sendMessage(plugin.I + ChatColor.RED + "You have removed spawn number " + i + 1 + ".");
                     }
                     else sender.sendMessage(plugin.I + ChatColor.RED + "Infected doesn't know where your tying to go, check how many spawns this arena has again!");
                 }

@@ -14,6 +14,7 @@ import me.xxsniperzzxx_sd.infected.Tools.Updater;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -26,6 +27,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -61,6 +63,7 @@ public class Main extends JavaPlugin
     public static File configFile = null;
 
     //Lists, Strings and Integers Infected needs
+    public static int arenaNumber = 0;
     public static ArrayList < String > possibleArenas = new ArrayList < String > ();
     public static ArrayList < String > possibleArenasU = new ArrayList < String > ();
     public static ArrayList < String > Winners = new ArrayList < String > ();
@@ -70,6 +73,7 @@ public class Main extends JavaPlugin
     public static ArrayList < String > zombies = new ArrayList < String > ();
     public static ArrayList < String > humans = new ArrayList < String > ();
     public static ArrayList < String > inGame = new ArrayList < String > ();
+    public static HashMap < String, String > Classes = new HashMap < String, String > ();
     public static HashMap < String, Integer > Leaders = new HashMap < String, Integer > ();
     public static HashMap < String, Boolean > Booleans = new HashMap < String, Boolean > ();
     public static HashMap < String, Long > Timein = new HashMap < String, Long > ();
@@ -174,7 +178,6 @@ public class Main extends JavaPlugin
             Updater updater = new Updater(this, "Infected-Core", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 
             update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
-            System.out.println(update);
             name = updater.getLatestVersionString();
             updateBukkitVersion = updater.updateBukkitVersion;
 
@@ -273,7 +276,7 @@ public class Main extends JavaPlugin
                                     Sign sign = (Sign) db.getInfoSign(loc).getBlock().getState();
                                     sign.setLine(1, ChatColor.GREEN + "Playing: " + ChatColor.DARK_GREEN + String.valueOf(Infected.listInGame().size()));
                                     sign.setLine(2, ChatColor.GOLD + status);
-                                    sign.setLine(3, ChatColor.WHITE + "Time: " + ChatColor.YELLOW + String.valueOf(time));
+                                    sign.setLine(3, ChatColor.GRAY + "Time: " + ChatColor.YELLOW + String.valueOf(time));
                                     sign.update();
                                 }
                             }
@@ -312,7 +315,7 @@ public class Main extends JavaPlugin
     Override
     public void onDisable()
     {
-
+    	
         //On disable reset players with everything from before
         for (Player players: Bukkit.getServer().getOnlinePlayers())
             if (players != null)
@@ -322,7 +325,7 @@ public class Main extends JavaPlugin
                 }
 
                 //Empty all the hashmaps and database settings(Blocks)
-        Methods.reset();
+        reset();
         db.getBackups().clear();
         db.getBlocks().clear();
         db.saveDB("plugins/Infected/Database.db");
@@ -332,5 +335,124 @@ public class Main extends JavaPlugin
     public void setupDisguiseCraft()
     {
         dcAPI = DisguiseCraft.getAPI();
+    }
+    @
+    SuppressWarnings("deprecation")
+    public static void resetp(Player player)
+    {
+
+        if (Main.config.getBoolean("ScoreBoard Support"))
+        {
+            ScoreboardManager manager = Bukkit.getScoreboardManager();
+            Scoreboard board = manager.getNewScoreboard();
+            board.registerNewObjective("empty", "dummy");
+
+            Objective objective = board.getObjective("empty");
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+            player.setScoreboard(board);
+        }
+        player.setHealth(20.0);
+        player.setFoodLevel(20);
+        for (PotionEffect reffect: player.getActivePotionEffects())
+        {
+            player.removePotionEffect(reffect.getType());
+        }
+        Methods.resetPlayersInventory(player);
+        player.updateInventory();
+        player.setGameMode(GameMode.valueOf(Main.gamemode.get(player.getName())));
+        Main.Lasthit.remove(player.getName());
+        if (Main.Inventory.containsKey(player.getName())) player.getInventory().setContents(Main.Inventory.get(player.getName()));
+        if (Main.Armor.containsKey(player.getName())) player.getInventory().setArmorContents(Main.Armor.get(player.getName()));
+        player.updateInventory();
+        player.setExp(Main.Exp.get(player.getName()));
+        player.setLevel(Main.Levels.get(player.getName()));
+        if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
+        if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
+        if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
+        if (Main.Classes.containsKey(player.getName())) Main.Classes.remove(player.getName());
+        Main.inLobby.remove(player.getName());
+        Main.zombies.remove(player.getName());
+        Main.KillStreaks.remove(player.getName());
+        Main.humans.remove(player.getName());
+        Main.inGame.remove(player.getName());
+        Main.Creating.remove(player.getName());
+        Main.Health.remove(player.getName());
+        Main.Food.remove(player.getName());
+        Main.Armor.remove(player.getName());
+        Main.Inventory.remove(player.getName());
+        Main.Spot.remove(player.getName());
+        Main.Winners.remove(player.getName());
+        if (Main.config.getBoolean("DisguiseCraft Support"))
+        {
+            if (Main.dcAPI.isDisguised(player)) Main.dcAPI.undisguisePlayer(player);
+        }
+        if (Main.Voted4.containsKey(player.getName()))
+        {
+            if (Main.Votes.containsKey(Main.Voted4.get(player.getName()))) Main.Votes.put(Main.Voted4.get(player.getName()).toString(), Main.Votes.get(Main.Voted4.get(player.getName())) - 1);
+            Main.Voted4.remove(player.getName());
+
+        }
+    }
+
+    //Reset the game(Method)
+    public static void reset()
+    {
+        for (Player players: Bukkit.getOnlinePlayers())
+        {
+            if (Infected.isPlayerInGame(players))
+            {
+                Infected.resetPlayer(players);
+                if (Main.config.getBoolean("ScoreBoard Support"))
+                {
+                    Methods.updateScoreBoard();
+                }
+            }
+        }
+        Main.db.getBlocks().clear();
+        Main.KillStreaks.clear();
+        Main.possibleArenas.clear();
+        Main.inLobby.clear();
+        Main.Classes.clear();
+        Main.Winners.clear();
+        Main.zombies.clear();
+        Main.humans.clear();
+        Main.inGame.clear();
+        Main.Voted4.clear();
+        Main.Votes.clear();
+        Main.Health.clear();
+        Main.Food.clear();
+        Main.Inventory.clear();
+        Main.Spot.clear();
+        Main.Armor.clear();
+        Main.Booleans.put("Started", false);
+        Main.Booleans.put("BeforeGame", false);
+        Main.Booleans.put("BeforeFirstInf", false);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
+        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
+        resetInf();
+    }
+    public static void resetInf()
+    {
+        Infected.booleanBeforeGame(false);
+        Infected.booleanBeforeInfected(false);
+        Infected.booleanStarted(false);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
+        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
+        Main.Winners.clear();
+        Main.humans.clear();
+        Main.zombies.clear();
+        Main.KillStreaks.clear();
+        if (!Main.db.getBlocks().isEmpty())
+        {
+            for (Location loc: Main.db.getBlocks().keySet())
+            {
+                loc.getBlock().setType(Main.db.getBlocks().get(loc));
+            }
+        }
+        Main.db.getBlocks().clear();
     }
 }

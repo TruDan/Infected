@@ -14,8 +14,6 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
-import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
 
 public class Game
 {
@@ -135,7 +133,14 @@ public class Game
                             }
                         }
 
-                        if (Main.Votes.isEmpty())
+                       if (!Main.config.getBoolean("Allow Votes"))
+                        {
+                    	   if(Main.arenaNumber>=Main.possibleArenas.size())
+                    		   Main.arenaNumber=0;
+                            Main.playingin = Main.possibleArenas.get(Main.arenaNumber);
+                            Main.arenaNumber++;
+                        }
+                       else if (Main.Votes.isEmpty())
                         {
                             Random r = new Random();
                             int i = r.nextInt(Main.possibleArenas.size());
