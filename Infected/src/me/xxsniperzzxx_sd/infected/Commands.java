@@ -1637,6 +1637,20 @@ public class Commands implements CommandExecutor
                         }
                         return true;
                     }
+                    if (args[1].equalsIgnoreCase("Lobby"))
+                    {
+                        if (plugin.inLobby.size() == 0)
+                        {
+                            player.sendMessage(plugin.I + ChatColor.GRAY + "No one's playing.");
+                            return true;
+                        }
+                        player.sendMessage(plugin.I + ChatColor.GOLD + "----In Lobby----");
+                        for (String all: plugin.inLobby)
+                        {
+                            player.sendMessage(plugin.I + ChatColor.YELLOW + "> " + all);
+                        }
+                        return true;
+                    }
                     if (Started == false)
                     {
                         player.sendMessage(plugin.I + ChatColor.GRAY + "The game hasn't started!");
@@ -1676,7 +1690,7 @@ public class Commands implements CommandExecutor
                     }
                     else
                     {
-                        player.sendMessage(plugin.I + ChatColor.RED + "Unknown List, Possible Lists: Playing, Humans, Zombies");
+                        player.sendMessage(plugin.I + ChatColor.RED + "Unknown List, Possible Lists: Playing, Lobby, Humans, Zombies");
                         return true;
                     }
                 }
