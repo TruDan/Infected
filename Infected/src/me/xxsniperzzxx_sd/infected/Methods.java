@@ -682,7 +682,7 @@ public class Methods
         is.setDurability(getItemData(Path));
         return is;
     }
-    public static Integer getItemID(String Path)
+    private static Integer getItemID(String Path)
     {
         String itemid = null;
         String string = Path;
@@ -717,7 +717,7 @@ public class Methods
         return i;
     }
 
-    public static Short getItemData(String Path)
+    private static Short getItemData(String Path)
     {
         String itemdata = null;
         String string = Path;
@@ -753,7 +753,7 @@ public class Methods
         Short s = Short.valueOf(itemdata);
         return s;
     }
-    public static Integer getItemAmount(String Path)
+    private static Integer getItemAmount(String Path)
     {
         String itemdata = null;
         String string = Path;
@@ -783,7 +783,7 @@ public class Methods
         return Integer.valueOf(itemdata);
     }
 
-    public static int getItemEnchant(String Path)
+    private static int getItemEnchant(String Path)
     {
         String itemdata = null;
         String string = Path;
@@ -808,7 +808,7 @@ public class Methods
             itemdata = "0";
         return Integer.valueOf(itemdata);
     }
-    public static int getItemEnchantLvl(String Path)
+    private static int getItemEnchantLvl(String Path)
     {
         String itemdata = null;
         String string = Path;
@@ -828,7 +828,7 @@ public class Methods
             itemdata = "1";
         return Integer.valueOf(itemdata);
     }
-    public static String getItemName(String Path)
+    private static String getItemName(String Path)
     {
         String itemName = null;
         if (Path.contains("%"))
@@ -1204,24 +1204,6 @@ public class Methods
         Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
         Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
         resetInf();
-    }
-    public static Object getArenaFiles(String path)
-    {
-        return Files.getArenas().get(path);
-    }
-    public static void editArenaFiles(String path, String value)
-    {
-        Files.getArenas().set(path, value);
-        Files.saveArenas();
-    }
-    public static Object getPlayerFiles(String path)
-    {
-        return Files.getPlayers().get(path);
-    }
-    public static void editPlayerFiles(String path, String value)
-    {
-        Files.getPlayers().set(path, value);
-        Files.savePlayers();
     }
     public static String countdown(HashMap < String, Integer > map)
     {
