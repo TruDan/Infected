@@ -1161,36 +1161,41 @@ public class PlayerListener implements Listener
                                 Sign sign = ((Sign) b.getState());
                                 if (sign.getLine(0).contains("[Infected]"))
                                 {
-                                	if(sign.getLine(1).contains("Class")){
+                                	if(sign.getLine(1).contains("Class"))
+                                	{
                                 		String className = sign.getLine(2).replaceAll("§a", "");
-                                		Main.Classes.put(player.getName(), className);
-                                		player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current class is: "+sign.getLine(2));
-                                	}else{
-	                                    String prices = sign.getLine(3).replaceAll("§4Cost: ", "");
-	                                    int price = Integer.valueOf(prices);
-	                                    String itemstring = sign.getLine(1).replaceAll("§f", "").replaceAll("§7", "");
-	
-	                                    String itemname = null;
-	                                    short itemdata = 0;
-	                                    String s = itemstring;
-	                                    if (s.contains(":"))
-	                                    {
-	                                        String[] s1 = s.split(":");
-	                                        itemname = s1[0];
-	                                        itemdata = Short.valueOf(s1[1]);
-	                                    }
-	                                    else
-	                                    {
-	                                        itemname = s;
-	                                        itemdata = 0;
-	                                    }
-	                                    Material im = null;
-	                                    for (Material item: Material.values())
-	                                        if (item.toString().equalsIgnoreCase(itemname))
-	                                        {
-	                                            im = item;
-	                                            break;
-	                                        }
+                                		if(player.hasPermission("Infected.Shop.Class") || player.hasPermission("Infected.Shop.Class."+className))
+                                		{
+                                			Main.Classes.put(player.getName(), className);
+                                			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current class is: "+sign.getLine(2));
+                                	
+                                		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+                                }else{
+                                	String prices = sign.getLine(3).replaceAll("§4Cost: ", "");
+                                	int price = Integer.valueOf(prices);
+                                	String itemstring = sign.getLine(1).replaceAll("§f", "").replaceAll("§7", "");
+                                	
+                                	String itemname = null;
+                                	short itemdata = 0;
+                                	String s = itemstring;
+                                	if (s.contains(":"))
+                                	{
+                                		String[] s1 = s.split(":");
+                                		itemname = s1[0];
+                                		itemdata = Short.valueOf(s1[1]);
+                                	}
+                                	else
+                                	{
+                                		itemname = s;
+                                		itemdata = 0;
+                                	}
+                                	Material im = null;
+                                	for (Material item: Material.values())
+                                		if (item.toString().equalsIgnoreCase(itemname))
+                                		{
+                                			im = item;
+                                			break;
+                                		}
 	                                    if (im != null)
 	                                    {
 	                                        Material item = Material.getMaterial(itemname);
