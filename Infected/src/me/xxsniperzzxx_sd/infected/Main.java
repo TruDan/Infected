@@ -75,7 +75,8 @@ public class Main extends JavaPlugin
     public static ArrayList < String > zombies = new ArrayList < String > ();
     public static ArrayList < String > humans = new ArrayList < String > ();
     public static ArrayList < String > inGame = new ArrayList < String > ();
-    public static HashMap < String, String > Classes = new HashMap < String, String > ();
+    public static HashMap < String, String > humanClasses = new HashMap < String, String > ();
+    public static HashMap < String, String > zombieClasses = new HashMap < String, String > ();
     public static HashMap < String, Integer > Leaders = new HashMap < String, Integer > ();
     public static HashMap < String, Boolean > Booleans = new HashMap < String, Boolean > ();
     public static HashMap < String, Long > Timein = new HashMap < String, Long > ();
@@ -371,7 +372,8 @@ public class Main extends JavaPlugin
         if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
         if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
         if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
-        if (Main.Classes.containsKey(player.getName())) Main.Classes.remove(player.getName());
+        Main.humanClasses.remove(player.getName());
+        Main.zombieClasses.remove(player.getName());
         Main.inLobby.remove(player.getName());
         Main.zombies.remove(player.getName());
         Main.KillStreaks.remove(player.getName());
@@ -414,7 +416,8 @@ public class Main extends JavaPlugin
         Main.KillStreaks.clear();
         Main.possibleArenas.clear();
         Main.inLobby.clear();
-        Main.Classes.clear();
+        Main.humanClasses.clear();
+        Main.zombieClasses.clear();
         Main.Winners.clear();
         Main.zombies.clear();
         Main.humans.clear();

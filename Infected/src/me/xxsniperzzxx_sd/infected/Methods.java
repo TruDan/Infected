@@ -279,7 +279,8 @@ public class Methods
         resetPlayersInventory(player);
         if (Infected.filesGetShop().getBoolean("Save Items")) player.getInventory().setContents(Infected.playerGetShopInventory(player));
         Main.Lasthit.remove(player.getName());
-        Main.Classes.remove(player.getName());
+        Main.humanClasses.remove(player.getName());
+        Main.zombieClasses.remove(player.getName());
         player.setGameMode(GameMode.ADVENTURE);
         player.updateInventory();
         player.setLevel(0);
@@ -593,16 +594,16 @@ public class Methods
     {
         if (Main.tagapi)
             TagAPI.refreshPlayer(human);
-        if(Main.Classes.containsKey(human.getName())){
-        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.Classes.get(human.getName())+".Items"))
+        if(Main.humanClasses.containsKey(human.getName())){
+        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses.get(human.getName())+".Items"))
 	        {
 	            human.getInventory().addItem(getItemStack(s));
 	            human.updateInventory();
 	        }
-	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Head") != null) human.getInventory().setHelmet(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Head")));
-	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Chest") != null) human.getInventory().setChestplate(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Chest")));
-	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Legs") != null) human.getInventory().setLeggings(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Legs")));
-	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Feet") != null) human.getInventory().setBoots(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Feet")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Head") != null) human.getInventory().setHelmet(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Head")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Chest") != null) human.getInventory().setChestplate(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Chest")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Legs") != null) human.getInventory().setLeggings(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Legs")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Feet") != null) human.getInventory().setBoots(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.humanClasses.get(human.getName())+".Feet")));
         }else{
 	        for (String s: Main.config.getStringList("Armor.Human.Items"))
 	        {
@@ -624,6 +625,7 @@ public class Methods
             TagAPI.refreshPlayer(zombie);
         //Give infected their armor
 
+        //Take away humans items
         for (String s: Main.config.getStringList("Armor.Human.Items"))
         {
             if (zombie.getInventory().contains(getItem(s).getType()))
@@ -631,9 +633,9 @@ public class Methods
                 zombie.getInventory().remove(getItem(s).getType());
             }
         }
-        
-        if(Main.Classes.containsKey(zombie.getName())){
-        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.Classes.get(zombie.getName())+".Items"))
+        //Take away any items from their human class
+        if(Main.humanClasses.containsKey(zombie.getName())){
+        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses.get(zombie.getName())+".Items"))
 	        {
 	            if (zombie.getInventory().contains(getItem(s).getType()))
 	            {
@@ -648,14 +650,28 @@ public class Methods
                 zombie.getInventory().addItem(armor);
             }
         }
-        for (String s: Main.config.getStringList("Armor.Zombie.Items"))
-        {
-            if (!zombie.getInventory().contains(getItem(s))) zombie.getInventory().addItem(getItemStack(s));
+        
+        //Add armor from the zombie class
+        if(Main.zombieClasses.containsKey(zombie.getName())){
+        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses.get(zombie.getName())+".Items"))
+	        {
+	            zombie.getInventory().addItem(getItemStack(s));
+	            zombie.updateInventory();
+	        }
+	        if (Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Head") != null) zombie.getInventory().setHelmet(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Head")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Chest") != null) zombie.getInventory().setChestplate(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Chest")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Legs") != null) zombie.getInventory().setLeggings(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Legs")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Feet") != null) zombie.getInventory().setBoots(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Feet")));
+        }else{
+	        for (String s: Main.config.getStringList("Armor.Zombie.Items"))
+	        {
+	            if (!zombie.getInventory().contains(getItem(s))) zombie.getInventory().addItem(getItemStack(s));
+	        }
+	        if (Main.config.getString("Armor.Zombie.Head") != null) zombie.getInventory().setHelmet(getItemStack(Main.config.getString("Armor.Zombie.Head")));
+	        if (Main.config.getString("Armor.Zombie.Chest") != null) zombie.getInventory().setChestplate(getItemStack(Main.config.getString("Armor.Zombie.Chest")));
+	        if (Main.config.getString("Armor.Zombie.Legs") != null) zombie.getInventory().setLeggings(getItemStack(Main.config.getString("Armor.Zombie.Legs")));
+	        if (Main.config.getString("Armor.Zombie.Feet") != null) zombie.getInventory().setBoots(getItemStack(Main.config.getString("Armor.Zombie.Feet")));
         }
-        if (Main.config.getString("Armor.Zombie.Head") != null) zombie.getInventory().setHelmet(getItemStack(Main.config.getString("Armor.Zombie.Head")));
-        if (Main.config.getString("Armor.Zombie.Chest") != null) zombie.getInventory().setChestplate(getItemStack(Main.config.getString("Armor.Zombie.Chest")));
-        if (Main.config.getString("Armor.Zombie.Legs") != null) zombie.getInventory().setLeggings(getItemStack(Main.config.getString("Armor.Zombie.Legs")));
-        if (Main.config.getString("Armor.Zombie.Feet") != null) zombie.getInventory().setBoots(getItemStack(Main.config.getString("Armor.Zombie.Feet")));
         zombie.updateInventory();
     }
     public static String sendMessage(String message, Player player, String Time, String List)
@@ -1141,7 +1157,8 @@ public class Methods
         if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
         if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
         if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
-        if (Main.Classes.containsKey(player.getName())) Main.Classes.remove(player.getName());
+        Main.humanClasses.remove(player.getName());
+        Main.zombieClasses.remove(player.getName());
         Main.inLobby.remove(player.getName());
         Main.zombies.remove(player.getName());
         Main.KillStreaks.remove(player.getName());
@@ -1184,7 +1201,8 @@ public class Methods
         Main.KillStreaks.clear();
         Main.possibleArenas.clear();
         Main.inLobby.clear();
-        Main.Classes.clear();
+        Main.zombieClasses.clear();
+        Main.humanClasses.clear();
         Main.Winners.clear();
         Main.zombies.clear();
         Main.humans.clear();

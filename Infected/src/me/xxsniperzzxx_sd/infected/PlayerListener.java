@@ -1164,13 +1164,27 @@ public class PlayerListener implements Listener
                                 	if(sign.getLine(1).contains("Class"))
                                 	{
                                 		String className = sign.getLine(2).replaceAll("§a", "");
-                                		if(player.hasPermission("Infected.Shop.Class") || player.hasPermission("Infected.Shop.Class."+className))
+                                		if(sign.getLine(3).contains("Human"))
                                 		{
-                                			Main.Classes.put(player.getName(), className);
-                                			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current class is: "+sign.getLine(2));
-                                	
-                                		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
-                                }else{
+                                    		if(player.hasPermission("Infected.Shop.Class.Human") || player.hasPermission("Infected.Shop.Class.Human."+className))
+                                    		{
+                                    			Main.humanClasses.put(player.getName(), className);
+                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+sign.getLine(2));
+                                    	
+                                    		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+                                		}
+                                		else if(sign.getLine(3).contains("Zombie"))
+                                		{
+                                    		if(player.hasPermission("Infected.Shop.Class.Zombie") || player.hasPermission("Infected.Shop.Class.Zombie."+className))
+                                    		{
+                                    			Main.zombieClasses.put(player.getName(), className);
+                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+sign.getLine(2));
+                                    	
+                                    		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+                                		}
+                                }
+                                else
+                                {
                                 	String prices = sign.getLine(3).replaceAll("§4Cost: ", "");
                                 	int price = Integer.valueOf(prices);
                                 	String itemstring = sign.getLine(1).replaceAll("§f", "").replaceAll("§7", "");
@@ -1402,17 +1416,24 @@ public class PlayerListener implements Listener
                         	   classFound = true;
                         	   className = classes;
                         	   break;
-                        	   
-                        	//TODO: Check if classname matches one in config if so set boolean yes
-                        	   //get out of loop, and add player and class to hashmap that holds playername classname
-                        	   //If map has playername skip the human equipping and equip class
                            }
                          }
                          if(classFound){
-                        	 event.setLine(0, ChatColor.DARK_RED + "" + "[Infected]");
-                        	 event.setLine(1, ChatColor.GRAY + "Class");
-                        	 event.setLine(2, ChatColor.GREEN + className);
-                        	 event.setLine(3, "");
+                        	 if(event.getLine(3).equalsIgnoreCase("Zombie"))
+                        	 {
+
+                            	 event.setLine(0, ChatColor.DARK_RED + "" + "[Infected]");
+                            	 event.setLine(1, ChatColor.GRAY + "Class");
+                            	 event.setLine(2, ChatColor.GREEN + className);
+                            	 event.setLine(3, ChatColor.RED+"-> Zombie <-"); 
+                        	 }
+                        	 else if(event.getLine(3).equalsIgnoreCase("Human"))
+                        	 {
+                            	 event.setLine(0, ChatColor.DARK_RED + "" + "[Infected]");
+                            	 event.setLine(1, ChatColor.GRAY + "Class");
+                            	 event.setLine(2, ChatColor.GREEN + className);
+                            	 event.setLine(3, ChatColor.DARK_GREEN+"-> Human <-"); 
+                        	 }
                          }else{
                         	 player.sendMessage(plugin.I + ChatColor.RED + " Well we managed to see you attempt to make a class sign, but thats not a class...");
                         	 event.setCancelled(true);

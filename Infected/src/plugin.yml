@@ -43,6 +43,11 @@ permissions:
         default: false
         children:
             infected.shop.class: true
+    infected.shop.class:
+        default: false
+        children:
+            infected.shop.class.human: true
+            infected.shop.class.zombie: true
     infected.*:
         default: op
         children:
