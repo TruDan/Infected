@@ -1,6 +1,7 @@
 # Default Abilities.yml, Last Edited in v1.8.3
 # Chances works like this: All chances are added up and a random number is chosen out of the numbers
 # Regular is the default zombie, it applies an effect for 1 second
+# PotionID:Durtaion:Power
 Abilities:
    Regular:
       Chance: 100

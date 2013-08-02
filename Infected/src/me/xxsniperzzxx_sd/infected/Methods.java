@@ -113,50 +113,93 @@ public class Methods
             }
         }
     }
+    public static void applyClassAbility(Player player){
+
+                Integer id = 0;
+                Integer time = 0;
+                Integer power = 0;
+                int max = 0;
+                String path = null;
+                if(Methods.getGroup(player).equalsIgnoreCase("Human"))
+                	max = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses+".Potion Effects").size();
+                else if(Methods.getGroup(player).equalsIgnoreCase("Zombie"))
+                	max = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses+".Potion Effects").size();
+                for (int x = 0; x < max; x++)
+                {
+                    if(Methods.getGroup(player).equalsIgnoreCase("Human"))
+                    	path = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses+".Potion Effects").get(x);
+                    else if(Methods.getGroup(player).equalsIgnoreCase("Zombie"))
+                    	path = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses+".Potion Effects").get(x);
+                    String[] strings = path.split(":");
+                    id = Integer.valueOf(strings[0]);
+                    time = Integer.valueOf(strings[1]) * 20;
+                    power = Integer.valueOf(strings[2]);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.getById(id), time, power));
+                }
+        }
     public static void disguisePlayer(Player player)
     {
-
         if (Main.config.getBoolean("DisguiseCraft Support") == true)
         {
-            // https://gitorious.org/disguisecraft/disguisecraft/blobs/master/src/pgDev/bukkit/DisguiseCraft/disguise/Disguise.java#line234
-            Random ra = new Random();
-            int chance = ra.nextInt(100);
-            if (!Main.dcAPI.isDisguised(player))
-            {
-                if (chance <= Main.config.getInt("Chance To Be Pig Zombie"))
-                {
-                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.PigZombie).addSingleData("noarmor"));
-                    if (Main.config.getBoolean("Debug"))
-                    {
-                        System.out.println("Choosing new zombie: " + player.getName() + " = pigzombie");
-                    }
-                }
-                else if (chance <= (Main.config.getInt("Chance To Be NPC Zombie") + Main.config.getInt("Chance To Be NPC Zombie")))
-                {
-                    if (Main.config.getBoolean("Debug"))
-                    {
-                        System.out.println("Choosing new zombie: " + player.getName() + " = infected zombie");
-                    }
-                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("infected").addSingleData("noarmor"));
-                }
-                else
-                {
-                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("noarmor"));
-                    if (Main.config.getBoolean("Debug"))
-                    {
-                        System.out.println("Choosing new zombie: " + player.getName() + " = zombie");
-                    }
-                }
-            }else{
-            	Main.dcAPI.undisguisePlayer(player);
-            	disguisePlayer(player);
-            }
+        	if(Main.zombieClasses.containsKey(player.getName()))
+        	{
+        		if (!Main.dcAPI.isDisguised(player))
+	            {
+        			if(DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise")).isMob())
+        				Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise").toUpperCase())).addSingleData("noarmor"));
+	            }
+        		else
+        		{
+	            	Main.dcAPI.undisguisePlayer(player);
+	            	disguisePlayer(player);
+        		}
+        	}
+        	else
+        	{
+	            // https://gitorious.org/disguisecraft/disguisecraft/blobs/master/src/pgDev/bukkit/DisguiseCraft/disguise/Disguise.java#line234
+	            Random ra = new Random();
+	            int chance = ra.nextInt(100);
+	            if (!Main.dcAPI.isDisguised(player))
+	            {
+	                if (chance <= Main.config.getInt("Chance To Be Pig Zombie"))
+	                {
+	                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.PigZombie).addSingleData("noarmor"));
+	                    if (Main.config.getBoolean("Debug"))
+	                    {
+	                        System.out.println("Choosing new zombie: " + player.getName() + " = pigzombie");
+	                    }
+	                }
+	                else if (chance <= (Main.config.getInt("Chance To Be NPC Zombie") + Main.config.getInt("Chance To Be NPC Zombie")))
+	                {
+	                    if (Main.config.getBoolean("Debug"))
+	                    {
+	                        System.out.println("Choosing new zombie: " + player.getName() + " = infected zombie");
+	                    }
+	                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("infected").addSingleData("noarmor"));
+	                }
+	                else
+	                {
+	                    Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Zombie).addSingleData("noarmor"));
+	                    if (Main.config.getBoolean("Debug"))
+	                    {
+	                        System.out.println("Choosing new zombie: " + player.getName() + " = zombie");
+	                    }
+	                }
+	            }else{
+	            	Main.dcAPI.undisguisePlayer(player);
+	            	disguisePlayer(player);
+	            }
+	        }
         }
     }
     
     public static void zombifyPlayer(Player player)
     {
-        if (Main.config.getBoolean("Zombie Abilities") == true)
+    	if(Main.zombieClasses.containsKey(player))
+    	{
+    	applyClassAbility(player);	
+    	}
+    	else if (Main.config.getBoolean("Zombie Abilities") == true)
         {
             applyAbilities(player);
         }
@@ -616,6 +659,7 @@ public class Methods
 	        if (Main.config.getString("Armor.Human.Feet") != null) human.getInventory().setBoots(getItemStack(Main.config.getString("Armor.Human.Feet")));
 	        }
         human.updateInventory();
+        applyClassAbility(human);
     }@
     SuppressWarnings("deprecation")
     public static void equipZombies(Player zombie)
