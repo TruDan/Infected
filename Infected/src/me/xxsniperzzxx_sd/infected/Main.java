@@ -49,6 +49,8 @@ public class Main extends JavaPlugin
     public static File abilitiesFile = null;
     public static YamlConfiguration killT = null;
     public static File killTFile = null;
+    public static YamlConfiguration classes = null;
+    public static File classesFile = null;
     public static YamlConfiguration arenas = null;
     public static File arenasFile = null;
     public static YamlConfiguration playerF = null;

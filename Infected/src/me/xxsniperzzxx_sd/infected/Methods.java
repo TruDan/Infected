@@ -594,15 +594,15 @@ public class Methods
         if (Main.tagapi)
             TagAPI.refreshPlayer(human);
         if(Main.Classes.containsKey(human.getName())){
-        	for (String s: Infected.filesGetShop().getStringList("Classes."+Main.Classes.get(human.getName())+".Items"))
+        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.Classes.get(human.getName())+".Items"))
 	        {
 	            human.getInventory().addItem(getItemStack(s));
 	            human.updateInventory();
 	        }
-	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Head") != null) human.getInventory().setHelmet(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Head")));
-	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Chest") != null) human.getInventory().setChestplate(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Chest")));
-	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Legs") != null) human.getInventory().setLeggings(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Legs")));
-	        if (Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Feet") != null) human.getInventory().setBoots(getItemStack(Infected.filesGetShop().getString("Classes."+Main.Classes.get(human.getName())+".Feet")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Head") != null) human.getInventory().setHelmet(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Head")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Chest") != null) human.getInventory().setChestplate(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Chest")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Legs") != null) human.getInventory().setLeggings(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Legs")));
+	        if (Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Feet") != null) human.getInventory().setBoots(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.Classes.get(human.getName())+".Feet")));
         }else{
 	        for (String s: Main.config.getStringList("Armor.Human.Items"))
 	        {
@@ -633,7 +633,7 @@ public class Methods
         }
         
         if(Main.Classes.containsKey(zombie.getName())){
-        	for (String s: Infected.filesGetShop().getStringList("Classes."+Main.Classes.get(zombie.getName())+".Items"))
+        	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.Classes.get(zombie.getName())+".Items"))
 	        {
 	            if (zombie.getInventory().contains(getItem(s).getType()))
 	            {

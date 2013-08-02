@@ -1,4 +1,4 @@
-# Default Shop.yml, Last Edited in v1.8.2
+# Default Shop.yml, Last Edited in v1.8.8
 # Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 # Should shop signs be enabled?
 Use: true
@@ -9,29 +9,6 @@ Save These Items No Matter What:
 - 827
 - 991
 - 0
-Classes:
-  Grenader:
-    Head: '298'
-    Chest: '299'
-    Legs: '300'
-    Feet: '301'
-    Items:
-    - '385,10%&3Grenade'
-    - '259'
-    - '258-19'
-    - '261-51'
-    - '262,10'
-  OddJob:
-    Head: '298'
-    Chest: '303'
-    Legs: '300'
-    Feet: '305'
-    Items:
-    - '346'
-    - '373:8194,2'
-    - '373:16389'
-    - '261-51'
-    - '262,10'
 # Create custom items below
 # Custom Item Name: Item info (ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name)
 StackOfArrow: 262,64

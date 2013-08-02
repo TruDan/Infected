@@ -19,6 +19,7 @@ public class Infected
         filesSaveGrenades();
         filesSaveMessages();
         filesSaveAbilities();
+        filesSaveClasses();
     }
     public static void filesReloadAllButConfig()
     {
@@ -29,6 +30,7 @@ public class Infected
         filesReloadGrenades();
         filesReloadMessages();
         filesReloadAbilities();
+        filesReloadClasses();
 
     }
     public static void playerSaveShopInventory(Player player)
@@ -339,6 +341,10 @@ public class Infected
     {
         return Files.getGrenades();
     }
+    public static Configuration filesGetClasses()
+    {
+        return Files.getClasses();
+    }
     public static Configuration filesGetMessages()
     {
         return Files.getMessages();
@@ -350,6 +356,10 @@ public class Infected
     public static void filesSaveAbilities()
     {
         Files.saveAbilities();
+    }
+    public static void filesSaveClasses()
+    {
+        Files.saveClasses();
     }
     public static void filesSaveMessages()
     {
@@ -374,6 +384,10 @@ public class Infected
     public static void filesSaveGrenades()
     {
         Files.saveGrenades();
+    }
+    public static void filesReloadClasses()
+    {
+        Files.reloadClasses();
     }
     public static void filesReloadAbilities()
     {

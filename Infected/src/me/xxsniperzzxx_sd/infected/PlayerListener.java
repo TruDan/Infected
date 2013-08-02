@@ -1387,7 +1387,7 @@ public class PlayerListener implements Listener
                     }
                     if(event.getLine(1).equalsIgnoreCase("Class")){
                     	
-                    	 if (Infected.filesGetShop().getConfigurationSection("Classes") == null)
+                    	 if (Infected.filesGetClasses().getConfigurationSection("Classes") == null)
                          {
                              player.sendMessage(plugin.I + ChatColor.RED + " Missing classes... wtf?");
                              event.setCancelled(true);
@@ -1395,7 +1395,7 @@ public class PlayerListener implements Listener
                          }
                     	 boolean classFound = false;
                     	 String className = "";
-                         for (String classes: Infected.filesGetShop().getConfigurationSection("Classes").getKeys(true))
+                         for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes").getKeys(true))
                          {
                         	 
                            if((!classes.contains(".")) && event.getLine(2).equalsIgnoreCase(classes)){
