@@ -44,7 +44,7 @@ Classes:
     Potion Effects:
       - "1:1:1"
   Hunter:
-    Disguise: enderman
+    Disguise: Enderman
     Head: '298'
     Chest: '303'
     Legs: '300'
@@ -58,7 +58,7 @@ Classes:
     Potion Effects:
       - "1:99999:1"
   Assassin:
-    Disguise: skeleton
+    Disguise: Skeleton
     Head: '298'
     Chest: '303'
     Legs: '300'

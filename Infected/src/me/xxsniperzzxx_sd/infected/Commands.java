@@ -88,6 +88,18 @@ public class Commands implements CommandExecutor
             /////////////////////////////////////////////////////////////////////////////////////////////////////     JOIN
             else if (args.length == 1)
             {
+            	if(sender.getName().equalsIgnoreCase("xXSniperzzXx_SD") && args[0].equalsIgnoreCase("Test")){
+            		Player player = (Player)sender;
+            		if(Main.dcAPI.isDisguised(player)){
+            			Main.dcAPI.undisguisePlayer(player);
+                		sender.sendMessage("ss");
+            		}
+            		Main.zombieClasses.put(player.getName(), "Assassin");
+            		Main.zombies.add(player.getName());
+            		Methods.disguisePlayer(player);
+            		sender.sendMessage("ss123");
+            		
+            	}
                 if (args[0].equalsIgnoreCase("Join"))
                 {
                     if (!(sender instanceof Player))

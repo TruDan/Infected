@@ -114,29 +114,35 @@ public class Methods
         }
     }
     public static void applyClassAbility(Player player){
-
-                Integer id = 0;
-                Integer time = 0;
-                Integer power = 0;
-                int max = 0;
-                String path = null;
-                if(Methods.getGroup(player).equalsIgnoreCase("Human"))
-                	max = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses+".Potion Effects").size();
-                else if(Methods.getGroup(player).equalsIgnoreCase("Zombie"))
-                	max = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses+".Potion Effects").size();
-                for (int x = 0; x < max; x++)
-                {
-                    if(Methods.getGroup(player).equalsIgnoreCase("Human"))
-                    	path = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses+".Potion Effects").get(x);
-                    else if(Methods.getGroup(player).equalsIgnoreCase("Zombie"))
-                    	path = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses+".Potion Effects").get(x);
-                    String[] strings = path.split(":");
-                    id = Integer.valueOf(strings[0]);
-                    time = Integer.valueOf(strings[1]) * 20;
-                    power = Integer.valueOf(strings[2]);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.getById(id), time, power));
-                }
-        }
+	
+    	for (PotionEffect reffect: player.getActivePotionEffects())
+    	{
+    		player.removePotionEffect(reffect.getType());
+    	}
+    	Integer id = 0;
+    	Integer time = 0;
+    	Integer power = 0;
+    	int max = 0;
+    	String path = "";
+    	if(Infected.isPlayerZombie(player))
+    		max = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses.get(player.getName())+".Potion Effects").size();
+    	
+    	else
+    		max = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses.get(player.getName())+".Potion Effects").size();
+    	
+    	for (int x = 0; x < max; x++)
+    	{
+    		if(Infected.isPlayerZombie(player))
+    			path = Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses.get(player.getName())+".Potion Effects").get(x);	
+    		else
+    			path = Infected.filesGetClasses().getStringList("Classes."+Main.humanClasses.get(player.getName())+".Potion Effects").get(x);
+    		String[] strings = path.split(":");
+    		id = Integer.valueOf(strings[0]);
+    		time = Integer.valueOf(strings[1]) * 20;
+    		power = Integer.valueOf(strings[2]);
+    		player.addPotionEffect(new PotionEffect(PotionEffectType.getById(id), time, power));
+    	}
+    }
     public static void disguisePlayer(Player player)
     {
         if (Main.config.getBoolean("DisguiseCraft Support") == true)
@@ -145,8 +151,9 @@ public class Methods
         	{
         		if (!Main.dcAPI.isDisguised(player))
 	            {
-        			if(DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise")).isMob())
-        				Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise").toUpperCase())).addSingleData("noarmor"));
+        			if(!(DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise")) == null)){
+        				Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.valueOf(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(player.getName())+".Disguise"))).addSingleData("noarmor"));
+        			}
 	            }
         		else
         		{
@@ -195,7 +202,7 @@ public class Methods
     
     public static void zombifyPlayer(Player player)
     {
-    	if(Main.zombieClasses.containsKey(player))
+    	if(Main.zombieClasses.containsKey(player.getName()))
     	{
     	applyClassAbility(player);	
     	}
@@ -1333,7 +1340,7 @@ public class Methods
     {
         String[] floc = loc.split(",");
         World world = Bukkit.getServer().getWorld(floc[0]);
-        Location Loc = new Location(world, Integer.valueOf(floc[1]), Integer.valueOf(floc[2]), Integer.valueOf(floc[3]), Float.valueOf(floc[4]), Float.valueOf(floc[5]));
+        Location Loc = new Location(world, Integer.valueOf(floc[1])+.5, Integer.valueOf(floc[2])+.5, Integer.valueOf(floc[3])+.5, Float.valueOf(floc[4]), Float.valueOf(floc[5]));
         return Loc;
     }
     public static void respawn(Player player)
@@ -1346,7 +1353,7 @@ public class Methods
         String loc = Files.getArenas().getStringList("Arenas." + Main.playingin + ".Spawns").get(i);
         String[] floc = loc.split(",");
         World world = Bukkit.getServer().getWorld(floc[0]);
-        Location Loc = new Location(world, Integer.valueOf(floc[1]), Integer.valueOf(floc[2]), Integer.valueOf(floc[3]), Float.valueOf(floc[4]), Float.valueOf(floc[5]));
+        Location Loc = new Location(world, Integer.valueOf(floc[1])+.5, Integer.valueOf(floc[2])+.5, Integer.valueOf(floc[3])+.5, Float.valueOf(floc[4]), Float.valueOf(floc[5]));
         player.teleport(Loc);
         Main.Lasthit.remove(player.getName());
         if (Main.config.getBoolean("ScoreBoard Support"))

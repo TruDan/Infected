@@ -109,7 +109,7 @@ public class Files
             return;
         try
         {
-            getAbilities().save(Main.classesFile);
+            getClasses().save(Main.classesFile);
         }
         catch (IOException ex)
         {
