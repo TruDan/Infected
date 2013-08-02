@@ -160,6 +160,7 @@ public class Main extends JavaPlugin
         Infected.filesGetMessages().options().copyDefaults(true);
         Infected.filesGetGrenades().options().copyDefaults(true);
         Infected.filesGetAbilities().options().copyDefaults(true);
+        Infected.filesGetClasses().options().copyDefaults(true);
         Infected.filesSafeAllButConfig();
         saveConfig();
 
