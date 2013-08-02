@@ -150,18 +150,15 @@ public class PlayerListener implements Listener
     EventHandler(priority = EventPriority.LOW)
     public void onPlayerBlockPlace(BlockPlaceEvent e)
     {
-        if (!e.isCancelled())
-        {
-            if (Main.inLobby.contains(e.getPlayer().getName()))
-            {
-                e.setCancelled(true);
-            }
-        }
-        else if (Main.inGame.contains(e.getPlayer().getName()))
-        {
-            Location loc = e.getBlock().getLocation();
-            plugin.db.getBlocks().put(loc, Material.AIR);
-        }
+    	if (Main.inLobby.contains(e.getPlayer().getName()))
+    	{
+    		e.setCancelled(true);
+    	}
+    	else if (Main.inGame.contains(e.getPlayer().getName()))
+    	{
+    		Location loc = e.getBlock().getLocation();
+    		plugin.db.getBlocks().put(loc, Material.AIR);
+    	}
     }
 
     //See if a player got kicked and if it effected the game
