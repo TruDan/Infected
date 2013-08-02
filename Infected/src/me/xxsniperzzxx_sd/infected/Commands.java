@@ -188,6 +188,10 @@ public class Commands implements CommandExecutor
                     player.setMaxHealth(20.0);
                     player.setHealth(20.0);
                     player.setFoodLevel(20);
+                    for (PotionEffect reffect: player.getActivePotionEffects())
+                    {
+                        player.removePotionEffect(reffect.getType());
+                    }
                     Methods.resetPlayersInventory(player);
                     if (Infected.filesGetShop().getBoolean("Save Items") && Infected.playerGetShopInventory(player) != null) player.getInventory().setContents(Infected.playerGetShopInventory(player));
                     player.sendMessage(Methods.sendMessage("Lobby_JoinLobby", null, null, null));
