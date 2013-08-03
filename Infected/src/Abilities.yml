@@ -1,7 +1,18 @@
 # Default Abilities.yml, Last Edited in v1.8.3
-# Chances works like this: All chances are added up and a random number is chosen out of the numbers
 # Regular is the default zombie, it applies an effect for 1 second
 # PotionID:Durtaion:Power
+
+
+# Chances for players to have an ability
+# Chances work like this:
+# Chance to be a regular is 100, and chance for everything else is 20-30
+# All together its 215
+# So if the random is <101 theyll be a regular zombie
+# If its >100 and <131 they'll be a tank zombie
+# If its >130 and <161 they'll be a Runner zombie
+# If its >160 and <181 they'll be a Ghost zombie
+# And so on...
+
 Abilities:
    Regular:
       Chance: 100

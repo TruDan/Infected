@@ -1,35 +1,95 @@
 # Default Infected Config, Last edited in 1.8.8
 # Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 
+# +======================================================+ #
+# |                      Updates                         | #
+# +======================================================+ #
+
+#Check for updates
 Check For Updates: true
-Download Update Regardless of CB Version: false
+  Enable: true
+  # Even if the bukkit versions don't match download(Not Recommended)
+  Download Regardless of CB Version: false
+
+# +======================================================+ #
+# |                   Plugin Addons                      | #
+# +======================================================+ #
+
 DisguiseCraft Support: false
-ScoreBoard Support: false
 Zombie Abilities: false
+Vault Support:
+  Enable: false
+  Reward: 100
+ScoreBoard Support: false
+
+# +======================================================+ #
+# |                   Game Settings                      | #
+# +======================================================+ #
+
+# Use books for Infecteds commands
 Book For Help: true
+
+# Info signs
 Info Signs:
   Enabled: true
+  # How long between each refresh time for the signs
   Refresh Time: 2
+  
+# Should players be allowed to join once a game has started
 Prevent Joining During Game: false
-Allowed Commands:
-- /list
-- /tell
-Allow Breaking Certain Blocks: true
-Use Zombie Movement Effects: true
-Disable Hunger: true
-Disable Enchanting: true
-Allow Interacting: true
-Allow Votes: true
-New Zombie Tp: false
-Chance To Be Pig Zombie: 20
-Chance To Be NPC Zombie: 20
+
+# Does the game auto start
 Automatic Start:
   Use: true
   Minimum Players: 3
+  
+ # Whats the time for each phase
 Time:
   Voting Time: 30
   Alpha Zombie Infection: 20
   Game Time Limit: 480
+
+# Chances for players to become a special zombie
+# Chances work like this:
+# Chance to be a regular is 100, and chance for everything else is 20
+# All together its 140
+# So if the random is <101 theyll be a regular zombie
+# If its >100 and <121 they'll be a pig zombie
+# If its >120 and <141 they'll be a npc zombie
+Chance To Be Pig Zombie: 20
+Chance To Be NPC Zombie: 20
+
+# Commands players can use inside Infected(Ops can use all commands regardless of being in Infected)
+Allowed Commands:
+- /list
+- /tell
+
+# This setting goes into the Arenas.yml and requires you to change the blocks players can break in that arena.
+Allow Breaking Certain Blocks: true
+
+# Play effects around the zombie every so many seconds
+Use Zombie Movement Effects: true
+
+Disable Hunger: true
+Disable Enchanting: true
+Allow Interacting: true
+
+# Are players allowed to vote. If not the maps will cycle through the finished maps
+Allow Votes: true
+
+# When a player becomes a zombie are they respawned?
+New Zombie Tp: false
+
+  
+# +======================================================+ #
+# |                  Points and Score                    | #
+# +======================================================+ #
+
+# Max - The most a user can have
+# Survive - What you get for each other human getting infected(As a human)
+# Zombies Infected - What you get for each human getting infected(As a zombie)
+# Kill - What you get when a game ends
+# Game Over - What you get when a game ends
 Points:
   Use: true
   Max Points: 10000
@@ -44,6 +104,13 @@ Score:
   Zombies Infected: 3
   Kill: 2
   Game Over: 10
+  
+# +======================================================+ #
+# |                  Armor and Weapons                   | #
+# +======================================================+ #
+
+
+# Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 Armor:
   Human:
     Head: '298'
@@ -61,8 +128,16 @@ Armor:
     Feet: '305'
     Items:
     - 272-34@100
+    
+# +======================================================+ #
+# |                After Game Rewards                    | #
+# +======================================================+ #
+
+
+# Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 Rewards:
 - 351:2,3
 - 265,2
+
+# The command triggered for each player when a player wins Infected
 Command Reward: tell <player> you have won!
-Lobby: World,-439,135,55,-308.82898,11.015873

@@ -1,2 +1,26 @@
 # Default Arena.yml, Last Edited in v1.6.1
+
+## Arena Name
+#  test:
+#
+#    # Are humans not allowed to attack zombies(Making them have to only run)
+#    Plain Zombie Survival: false
+#   
+#    # Are mobs allowed to break blocks
+#    Allow Breaking Of:
+#
+#      # All teams can break these blocks
+#      Global:
+#      - '55'
+#      - '20'
+#     
+#      # Only these teams can break blocks in a list(Look at global)
+#      Human: '[]'
+#      Zombie: '[]'
+#  
+#    # Where players can spawn
+#    Spawns:
+#    - world,-479,33,156,-91.95003,7.949999
+# +========================================================================+
+
 Arenas: []
