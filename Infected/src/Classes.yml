@@ -4,7 +4,6 @@
 # If class is purely for humans put Disguise: Nothing (Humans won't be disguised no matter what this says) It just won't disguise the zombies
 Classes:
   Knight:
-    Disguise: nothing
     Head: '306'
     Chest: '299'
     Legs: '300'
@@ -16,7 +15,6 @@ Classes:
     Potion Effects:
       - "2:99999:1"
   Grenader:
-    Disguise: nothing
     Head: '298'
     Chest: '299'
     Legs: '300'
@@ -30,7 +28,6 @@ Classes:
     Potion Effects:
       - "1:1:1"
   OddJob:
-    Disguise: nothing
     Head: '298'
     Chest: '303'
     Legs: '300'

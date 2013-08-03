@@ -39,15 +39,12 @@ permissions:
             infected.chat: true
             infected.info: true
             infected.suicide: true
-    infected.shop:
-        default: false
+            infected.classes: true
+    Infected.Classes:
+        default: true
         children:
-            infected.shop.class: true
-    infected.shop.class:
-        default: false
-        children:
-            infected.shop.class.human: true
-            infected.shop.class.zombie: true
+            Infected.Classes.Human: true
+            Infected.Classes.Zombie: true
     infected.*:
         default: op
         children:

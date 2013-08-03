@@ -1163,7 +1163,7 @@ public class PlayerListener implements Listener
                                 		String className = sign.getLine(2).replaceAll("§a", "");
                                 		if(sign.getLine(3).contains("Human"))
                                 		{
-                                    		if(player.hasPermission("Infected.Shop.Class.Human") || player.hasPermission("Infected.Shop.Class.Human."+className))
+                                    		if(player.hasPermission("Infected.Classes.Human") || player.hasPermission("Infected.Classes.Human."+className))
                                     		{
                                     			Main.humanClasses.put(player.getName(), className);
                                     			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+sign.getLine(2));
@@ -1172,7 +1172,7 @@ public class PlayerListener implements Listener
                                 		}
                                 		else if(sign.getLine(3).contains("Zombie"))
                                 		{
-                                    		if(player.hasPermission("Infected.Shop.Class.Zombie") || player.hasPermission("Infected.Shop.Class.Zombie."+className))
+                                    		if(player.hasPermission("Infected.Classes.Zombie") || player.hasPermission("Infected.Classes.Zombie."+className))
                                     		{
                                     			Main.zombieClasses.put(player.getName(), className);
                                     			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+sign.getLine(2));

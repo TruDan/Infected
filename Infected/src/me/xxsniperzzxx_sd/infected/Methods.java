@@ -706,7 +706,7 @@ public class Methods
         if(Main.zombieClasses.containsKey(zombie.getName())){
         	for (String s: Infected.filesGetClasses().getStringList("Classes."+Main.zombieClasses.get(zombie.getName())+".Items"))
 	        {
-	            zombie.getInventory().addItem(getItemStack(s));
+        		if (!zombie.getInventory().contains(getItem(s))) zombie.getInventory().addItem(getItemStack(s));
 	            zombie.updateInventory();
 	        }
 	        if (Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Head") != null) zombie.getInventory().setHelmet(getItemStack(Infected.filesGetClasses().getString("Classes."+Main.zombieClasses.get(zombie.getName())+".Head")));
