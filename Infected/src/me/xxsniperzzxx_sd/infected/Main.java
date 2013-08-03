@@ -11,6 +11,7 @@ import me.xxsniperzzxx_sd.infected.Tools.Metrics;
 import me.xxsniperzzxx_sd.infected.Tools.TagApi;
 import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 import me.xxsniperzzxx_sd.infected.Tools.Updater;
+import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -132,6 +134,7 @@ public class Main extends JavaPlugin
     //Plugin Addons
     public static boolean tagapi = false;
     public static DisguiseCraftAPI dcAPI;
+    public static Economy economy = null;
     //	public NamedItemStack NIS;
 
 
@@ -154,7 +157,8 @@ public class Main extends JavaPlugin
         //Create Configs and files
         Infected.filesGetArenas().options().copyDefaults(true);
         Infected.filesGetKillTypes().options().copyDefaults(true);
-        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+        //getConfig().options().copyDefaults(true);
         Infected.filesGetShop().options().copyDefaults(true);
         Infected.filesGetPlayers().options().copyDefaults(true);
         Infected.filesGetMessages().options().copyDefaults(true);
@@ -176,7 +180,7 @@ public class Main extends JavaPlugin
         Main.v = pdf.getVersion();
         String[] s = Bukkit.getBukkitVersion().split("-");
         currentBukkitVersion = s[0];
-        if (getConfig().getBoolean("Check For Updates"))
+        if (getConfig().getBoolean("Check For Updates.Enable"))
         {
 
             Updater updater = new Updater(this, "Infected-Core", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
@@ -211,6 +215,21 @@ public class Main extends JavaPlugin
                     getConfig().set("DisguiseCraft Support", false);
                     saveConfig();
                 }
+            }
+        }
+        //Check if the plugin addons are there
+        if (getConfig().getBoolean("Vault Support.Enable"))
+        {
+        	if (!(getServer().getPluginManager().getPlugin("Vault") == null))
+        	{
+        		setupEconomy();
+        	}
+        	else
+        	{
+        		System.out.println(Main.I + "Vault wasn't found on this server, switching to Vault Support: false");
+        		getConfig().set("Vault Support.Enable", false);
+        		saveConfig();
+                
             }
         }
         if (getServer().getPluginManager().getPlugin("TagAPI") == null)
@@ -340,6 +359,29 @@ public class Main extends JavaPlugin
     {
         dcAPI = DisguiseCraft.getAPI();
     }
+    
+
+    private boolean setupEconomy()
+    {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+
+        return (economy != null);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @
     SuppressWarnings("deprecation")
     public static void resetp(Player player)

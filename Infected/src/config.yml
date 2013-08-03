@@ -6,10 +6,8 @@
 # +======================================================+ #
 
 #Check for updates
-Check For Updates: true
+Check For Updates:
   Enable: true
-  # Even if the bukkit versions don't match download(Not Recommended)
-  Download Regardless of CB Version: false
 
 # +======================================================+ #
 # |                   Plugin Addons                      | #

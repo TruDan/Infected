@@ -1836,10 +1836,11 @@ public class Commands implements CommandExecutor
                 player.sendMessage(plugin.I + ChatColor.GRAY + "Author:" + ChatColor.GREEN + " xXSniperzzXx_SD");
                 player.sendMessage(plugin.I + ChatColor.GRAY + "Version: " + ChatColor.GREEN + plugin.v);
                 player.sendMessage(plugin.I + ChatColor.GRAY + "BukkitDev:" + ChatColor.GREEN + " http://bit.ly/QN6Xg5");
-                player.sendMessage(plugin.I + ChatColor.GRAY + "DisguiseCraft Support:" + ChatColor.GREEN + " " + (plugin.getConfig().getBoolean("DisguiseCraft Support") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
-                player.sendMessage(plugin.I + ChatColor.GRAY + "Zombie Abilities: " + ChatColor.GREEN + "" + (plugin.getConfig().getBoolean("Zombie Abilities") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
-                player.sendMessage(plugin.I + ChatColor.GRAY + "Grenades: " + ChatColor.GREEN + "" + (Infected.filesGetGrenades().getBoolean("Use") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
-                player.sendMessage(plugin.I + ChatColor.GRAY + "Shop: " + ChatColor.GREEN + "" + (Infected.filesGetShop().getBoolean("Use") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
+                if(player.hasPermission("Infected.SetUp"))	player.sendMessage(plugin.I + ChatColor.GRAY + "DisguiseCraft Support:" + ChatColor.GREEN + " " + (plugin.getConfig().getBoolean("DisguiseCraft Support") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
+                if(player.hasPermission("Infected.SetUp"))	player.sendMessage(plugin.I + ChatColor.GRAY + "Zombie Abilities: " + ChatColor.GREEN + "" + (plugin.getConfig().getBoolean("Zombie Abilities") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
+                if(player.hasPermission("Infected.SetUp"))	player.sendMessage(plugin.I + ChatColor.GRAY + "Vault Support:" + ChatColor.GREEN + " " + (plugin.getConfig().getBoolean("Vault Support.Enable") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
+                if(player.hasPermission("Infected.SetUp"))	player.sendMessage(plugin.I + ChatColor.GRAY + "Grenades: " + ChatColor.GREEN + "" + (Infected.filesGetGrenades().getBoolean("Use") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
+                if(player.hasPermission("Infected.SetUp"))	player.sendMessage(plugin.I + ChatColor.GRAY + "Shop: " + ChatColor.GREEN + "" + (Infected.filesGetShop().getBoolean("Use") ? (ChatColor.GREEN + "Enabled") : (ChatColor.RED + "Disabled")));
                 player.sendMessage(plugin.I + ChatColor.YELLOW + "For Help type: /Infected Help");
                 player.sendMessage("");
                 return true;
