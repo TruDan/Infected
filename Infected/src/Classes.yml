@@ -3,67 +3,69 @@
 # Infected's Potion Effect Codes ----  PotionID:Durtaion:Power
 # If class is purely for humans put Disguise: Nothing (Humans won't be disguised no matter what this says) It just won't disguise the zombies
 Classes:
-  Knight:
-    Head: '306'
-    Chest: '299'
-    Legs: '300'
-    Feet: '301'
-    Items:
-    - '283'
-    - '261-51'
-    - '262,10'
-    Potion Effects:
-      - "2:99999:1"
-  Grenader:
-    Head: '298'
-    Chest: '299'
-    Legs: '300'
-    Feet: '301'
-    Items:
-    - '385,10%&3Grenade'
-    - '259'
-    - '258-19'
-    - '261-51'
-    - '262,10'
-    Potion Effects:
-      - "1:1:1"
-  OddJob:
-    Head: '298'
-    Chest: '303'
-    Legs: '300'
-    Feet: '305'
-    Items:
-    - '346'
-    - '373:8194,2'
-    - '373:16389'
-    - '261-51'
-    - '262,10'
-    Potion Effects:
-      - "1:1:1"
-  Hunter:
-    Disguise: Enderman
-    Head: '298'
-    Chest: '303'
-    Legs: '300'
-    Feet: '305'
-    Items:
-    - '346'
-    - '373:8194,2'
-    - '373:16389'
-    - '261-51'
-    - '262,10'
-    Potion Effects:
-      - "1:99999:1"
-  Assassin:
-    Disguise: Skeleton
-    Head: '298'
-    Chest: '303'
-    Legs: '300'
-    Feet: '305'
-    Items:
-    - '261-51'
-    - '262,1'
-    - '268-19'
-    - '346'
-    Potion Effects:
-      - "16:99999:1"
+  Human:
+    Knight:
+      Head: '306'
+      Chest: '299'
+      Legs: '300'
+      Feet: '301'
+      Items:
+      - '283'
+      - '261-51'
+      - '262,10'
+      Potion Effects:
+        - "2:99999:1"
+    Grenader:
+      Head: '298'
+      Chest: '299'
+      Legs: '300'
+      Feet: '301'
+      Items:
+      - '385,10%&3Grenade'
+      - '259'
+      - '258-19'
+      - '261-51'
+      - '262,10'
+      Potion Effects:
+        - "1:1:1"
+    OddJob:
+      Head: '298'
+      Chest: '303'
+      Legs: '300'
+      Feet: '305'
+      Items:
+      - '346'
+      - '373:8194,2'
+      - '373:16389'
+      - '261-51'
+      - '262,10'
+      Potion Effects:
+        - "1:1:1"
+  Zombie:
+    Hunter:
+      Disguise: Enderman
+      Head: '298'
+      Chest: '303'
+      Legs: '300'
+      Feet: '305'
+      Items:
+      - '346'
+      - '373:8194,2'
+      - '373:16389'
+      - '261-51'
+      - '262,10'
+      Potion Effects:
+        - "1:99999:1"
+    Assassin:
+      Disguise: Skeleton
+      Head: '298'
+      Chest: '303'
+      Legs: '300'
+      Feet: '305'
+      Items:
+      - '261-51'
+      - '262,1'
+      - '268-19'
+      - '346'
+      Potion Effects:
+        - "16:99999:1"

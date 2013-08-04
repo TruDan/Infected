@@ -1436,8 +1436,10 @@ public class PlayerListener implements Listener
                         event.setCancelled(true);
                     }
                     if(event.getLine(1).equalsIgnoreCase("Class")){
-                    	
-                    	 if (Infected.filesGetClasses().getConfigurationSection("Classes") == null)
+
+                   	 if(event.getLine(3).equalsIgnoreCase("Zombie"))
+                   	 {
+                    	 if (Infected.filesGetClasses().getConfigurationSection("Classes.Zombie") == null)
                          {
                              player.sendMessage(plugin.I + ChatColor.RED + " Missing classes... wtf?");
                              event.setCancelled(true);
@@ -1445,7 +1447,7 @@ public class PlayerListener implements Listener
                          }
                     	 boolean classFound = false;
                     	 String className = "";
-                         for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes").getKeys(true))
+                         for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Zombie").getKeys(true))
                          {
                         	 
                            if((!classes.contains(".")) && event.getLine(2).equalsIgnoreCase(classes)){
@@ -1455,16 +1457,33 @@ public class PlayerListener implements Listener
                            }
                          }
                          if(classFound){
-                        	 if(event.getLine(3).equalsIgnoreCase("Zombie"))
-                        	 {
 
                             	 event.setLine(0, ChatColor.DARK_RED + "" + "[Infected]");
                             	 event.setLine(1, ChatColor.GRAY + "Class");
                             	 event.setLine(2, ChatColor.GREEN + className);
                             	 event.setLine(3, ChatColor.RED+"-> Zombie <-"); 
                         	 }
-                        	 else if(event.getLine(3).equalsIgnoreCase("Human"))
-                        	 {
+                   	 }
+                      else if(event.getLine(3).equalsIgnoreCase("Human"))
+                      {
+                    	  if (Infected.filesGetClasses().getConfigurationSection("Classes.Human") == null)
+                          {
+                              player.sendMessage(plugin.I + ChatColor.RED + " Missing classes... wtf?");
+                              event.setCancelled(true);
+                              event.getBlock().breakNaturally();
+                          }
+                     	 boolean classFound = false;
+                     	 String className = "";
+                          for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Human").getKeys(true))
+                          {
+                         	 
+                            if((!classes.contains(".")) && event.getLine(2).equalsIgnoreCase(classes)){
+                         	   classFound = true;
+                         	   className = classes;
+                         	   break;
+                            }
+                          }
+                          if(classFound){
                             	 event.setLine(0, ChatColor.DARK_RED + "" + "[Infected]");
                             	 event.setLine(1, ChatColor.GRAY + "Class");
                             	 event.setLine(2, ChatColor.GREEN + className);

@@ -85,21 +85,140 @@ public class Commands implements CommandExecutor
                     }
                 }
             }
+            ////////////////////////////////////////////////////////////////  CLASSES
+            else if (args.length >= 1 && args[0].equalsIgnoreCase("Classes"))
+            {
+
+            	if (!(sender instanceof Player))
+            	{
+            		sender.sendMessage(plugin.I + ChatColor.RED + "Expected a player!");
+            		return true;
+            	}
+            	Player player = (Player)sender;
+
+            	if(args.length == 3){
+            		if(args[1].equalsIgnoreCase("Human"))
+            		{
+
+                        if (!sender.hasPermission("Infected.Classes.Human") && !sender.hasPermission("Infected.Classes.Human."+args[2]))
+                        {
+                            sender.sendMessage(Methods.sendMessage("Error_NoPermission", null, null, null));
+                            return true;
+                        }
+                  	  if (Infected.filesGetClasses().getConfigurationSection("Classes.Human") == null)
+                        {
+                            player.sendMessage(plugin.I + ChatColor.RED + " Missing classes... wtf?");
+                            return true;
+                        }
+                  	  boolean classFound = false;
+                  	  String className = "";
+                  	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Human").getKeys(true))
+                        {
+                       	 
+                          if((!classes.contains(".")) && args[2].equalsIgnoreCase(classes)){
+                       	   classFound = true;
+                       	   className = classes;
+                       	   break;
+                          }
+                        }
+                        if(classFound)
+                        {
+                        	Main.humanClasses.put(player.getName(), className);
+                			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+args[2]);
+                        }
+                        else{
+                       	 player.sendMessage(plugin.I + ChatColor.RED + " That class doesn't exist");
+                        }
+            		}
+            		else if(args[1].equalsIgnoreCase("Zombie"))
+            		{
+                        if (!sender.hasPermission("Infected.Classes.Zombie") && !sender.hasPermission("Infected.Classes.Zombie."+args[2]))
+                        {
+                            sender.sendMessage(Methods.sendMessage("Error_NoPermission", null, null, null));
+                            return true;
+                        }
+            			if (Infected.filesGetClasses().getConfigurationSection("Classes.Zombies") == null)
+                          {
+                              player.sendMessage(plugin.I + ChatColor.RED + " Missing classes... wtf?");
+                              return true;
+                          }
+                    	  boolean classFound = false;
+                    	  String className = "";
+                    	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Zombie").getKeys(true))
+                          {
+                         	 
+                            if((!classes.contains(".")) && args[2].equalsIgnoreCase(classes)){
+                         	   classFound = true;
+                         	   className = classes;
+                         	   break;
+                            }
+                          }
+                          if(classFound)
+                          {
+                          	Main.zombieClasses.put(player.getName(), className);
+                  			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+args[2]);
+                          }
+                  		else
+                		{
+               			 player.sendMessage(plugin.I + ChatColor.RED + "/Inf Classes <Zombie/Human> [ClassName]");
+            			 player.sendMessage(plugin.I + ChatColor.GREEN + "Human Classes:");
+
+                    	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Human") == null))
+                        	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Human").getKeys(true))
+                                if((!classes.contains("."))){
+                       			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                                }
+             			 player.sendMessage(plugin.I + ChatColor.RED + "\nZombie Classes:");
+
+                    	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Zombie") == null))
+                        	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Zombie").getKeys(true))
+                                if((!classes.contains("."))){
+                       			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                                }
+                		}
+            		}
+            		else
+            		{
+           			 player.sendMessage(plugin.I + ChatColor.RED + "/Inf Classes <Zombie/Human> [ClassName]");
+        			 player.sendMessage(plugin.I + ChatColor.GREEN + "Human Classes:");
+
+                	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Human") == null))
+                    	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Human").getKeys(true))
+                            if((!classes.contains("."))){
+                   			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                            }
+         			 player.sendMessage(plugin.I + ChatColor.RED + "\nZombie Classes:");
+
+                	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Zombie") == null))
+                    	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Zombie").getKeys(true))
+                            if((!classes.contains("."))){
+                   			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                            }
+            		}
+                    	
+            	}
+        		else
+        		{
+       			 player.sendMessage(plugin.I + ChatColor.RED + "/Inf Classes <Zombie/Human> [ClassName]");
+    			 player.sendMessage(plugin.I + ChatColor.GREEN + "Human Classes:");
+
+            	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Human") == null))
+                	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Human").getKeys(true))
+                        if((!classes.contains("."))){
+               			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                        }
+     			 player.sendMessage(plugin.I + ChatColor.RED + "\nZombie Classes:");
+
+            	  if (!(Infected.filesGetClasses().getConfigurationSection("Classes.Zombie") == null))
+                	  for (String classes: Infected.filesGetClasses().getConfigurationSection("Classes.Zombie").getKeys(true))
+                        if((!classes.contains("."))){
+               			 player.sendMessage(plugin.I + ChatColor.GOLD + classes);
+                        }
+        		}
+            }
             /////////////////////////////////////////////////////////////////////////////////////////////////////     JOIN
             else if (args.length == 1)
             {
-            	if(sender.getName().equalsIgnoreCase("xXSniperzzXx_SD") && args[0].equalsIgnoreCase("Test")){
-            		Player player = (Player)sender;
-            		if(Main.dcAPI.isDisguised(player)){
-            			Main.dcAPI.undisguisePlayer(player);
-                		sender.sendMessage("ss");
-            		}
-            		Main.zombieClasses.put(player.getName(), "Assassin");
-            		Main.zombies.add(player.getName());
-            		Methods.disguisePlayer(player);
-            		sender.sendMessage("ss123");
-            		
-            	}
                 if (args[0].equalsIgnoreCase("Join"))
                 {
                     if (!(sender instanceof Player))
@@ -672,7 +791,7 @@ public class Commands implements CommandExecutor
                             ArrayList < String > pages = new ArrayList < String > ();
                             pages.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " Infected Player\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Join\n" + ChatColor.GOLD + " - Join Infected\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Leave\n" + ChatColor.GOLD + " - Leave Infected\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Vote <Arena>\n" + ChatColor.GOLD + " - Vote for a map\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Shop [Id]\n" + ChatColor.GOLD + " - See the purchasable grenades\n"+ ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Suicide \n" + ChatColor.GOLD + " - Suicide if your stuck");
                             pages.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " Infected Player\n" + "   Commands (2)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Chat <Msg>\n" + ChatColor.GOLD + " - Chat in your team's chat\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Stats [Player]\n" + ChatColor.GOLD + " - Check a player's stats\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Arenas\n" + ChatColor.GOLD + " - See all possible arenas\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Top <Category>\n" + ChatColor.GOLD + " - Check the top 5 players");
-                            pages.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " Infected Player\n" + "   Commands (3)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Info\n" + ChatColor.GOLD + " - See The current status\n");
+                            pages.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " Infected Player\n" + "   Commands (3)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Info\n" + ChatColor.GOLD + " - See The current status\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Classes\n" + ChatColor.GOLD + " - Choose a class\n");
                              if (player.hasPermission("Infected.SetUp")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Admin\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetLobby\n" + ChatColor.DARK_AQUA + " - Set the main lobby\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Create <Arena>\n" + ChatColor.DARK_AQUA + " - Create an arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Remove <Arena>\n" + ChatColor.DARK_AQUA + " - Remove an Arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetArena <Arena>\n" + ChatColor.DARK_AQUA + " - Select an arena\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "SetSpawn\n" + ChatColor.DARK_AQUA + " - Set the spawn");
                             if (player.hasPermission("Infected.SetUp")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Admin\n" + "   Commands (2)" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "TpSpawn <ID>\n" + ChatColor.DARK_AQUA + " - Teleport to the spawn ID(Number)\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "DelSpawn <ID>\n" + ChatColor.DARK_AQUA + " - Remove the spawn ID(Number)\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Spawns\n" + ChatColor.DARK_AQUA + " - List how many spawns an arena has\n" + ChatColor.GREEN + " /Inf TpLobby" + ChatColor.DARK_GRAY + ". Tp to the lobby.\n");
                             if (player.hasPermission("Infected.Force")) pages.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + " Infected Force\n" + "     Commands" + "\n\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Start\n" + ChatColor.BLACK + " - Force the game to start\n" + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "End\n" + ChatColor.BLACK + " - Force the game to end\n"+ ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Refresh\n" + ChatColor.BLACK + " - Force all the players to refresh eachother\n");
@@ -1094,7 +1213,8 @@ public class Commands implements CommandExecutor
                     player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Join" + ChatColor.WHITE + " - Join Infected");
                     player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Leave" + ChatColor.WHITE + " - Leave Infected");
                     player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Vote" + ChatColor.WHITE + " - Vote for a map");
-                    if (player.hasPermission("Infected.Shop")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Shop" + ChatColor.WHITE + " - See the purchasable grenades");
+                    player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Classes" + ChatColor.WHITE + " - Choose a class");
+                     if (player.hasPermission("Infected.Shop")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Shop" + ChatColor.WHITE + " - See the purchasable grenades");
                     if (player.hasPermission("Infected.Chat")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Chat" + ChatColor.WHITE + " - Chat in your team's chat");
                     if (player.hasPermission("Infected.Stats")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Stats" + ChatColor.WHITE + " - Check a player's stats");
                     if (player.hasPermission("Infected.Suicide")) player.sendMessage(plugin.I + ChatColor.GRAY + "/Inf " + ChatColor.GREEN + "Suicide" + ChatColor.WHITE + " - Suicide if you're stuck");
