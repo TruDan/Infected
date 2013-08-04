@@ -7,11 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 public class Database
 {
@@ -19,6 +22,7 @@ public class Database
     private HashMap < String, String > shopSigns = new HashMap < String, String > ();
     private HashMap < String, Integer > infoSigns = new HashMap < String, Integer > ();
     private HashMap < String, ItemStack[] > Backup = new HashMap < String, ItemStack[] > ();
+	private HashMap<Location, String> Chests = new HashMap<Location, String>();
     private FileOutputStream fos;
     private ObjectOutputStream oos;
     private FileInputStream fis;
@@ -50,6 +54,7 @@ public class Database
             oos.writeObject(shopSigns);
             oos.writeObject(infoSigns);
             oos.writeObject(Blocks);
+            oos.writeObject(Chests);
             oos.flush();
             oos.close();
         }
@@ -87,6 +92,7 @@ public class Database
             shopSigns.putAll((Map <? extends String, ? extends String > ) oin.readObject());
             infoSigns.putAll((Map <? extends String, ? extends Integer > ) oin.readObject());
             Blocks.putAll((Map <? extends Location, ? extends Material > ) oin.readObject());
+            Chests.putAll((Map <? extends Location, ? extends String > ) oin.readObject());
         }
         catch (IOException e)
         {
@@ -134,6 +140,7 @@ public class Database
         try
         {
             oos.writeObject(Backup);
+            oos.writeObject(Chests);
             oos.writeObject(Blocks);
             oos.writeObject(shopSigns);
             oos.writeObject(infoSigns);
@@ -231,4 +238,17 @@ public class Database
         String s = String.valueOf(loc.getWorld().getName() + "," + loc.getX()) + "," + String.valueOf(loc.getY()) + "," + String.valueOf(loc.getZ());
         return getInfoSigns().containsKey(s);
     }
+    //#############################################################################################################################################
+
+	public HashMap<Location, String> getChests(){
+		return Chests;
+	}
+	public void saveChest(Location loc, Inventory inv){
+		String data = ItemSerialization.toBase64(inv);
+		Chests.put(loc, data);
+		
+	}
+	public void clearChests(){
+		Chests.clear();
+	}
 }

@@ -13,6 +13,7 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Item;
@@ -44,6 +45,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -145,6 +147,23 @@ public class PlayerListener implements Listener
         }
     }
 
+    
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerInteract(PlayerInteractEvent e) {
+		if(Infected.booleanIsStarted() && Infected.isPlayerInGame(e.getPlayer())){
+			if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
+				Block b = e.getClickedBlock();
+				if(e.getClickedBlock().getTypeId()==54) {
+					Chest chest = (Chest) b.getState();
+					Inventory z;
+					z=chest.getBlockInventory();
+					if(!Main.db.getChests().containsKey(z))Main.db.saveChest(b.getLocation(), z);
+				}
+			}
+		}
+	} 
+    
     //Check to make sure they arn't trying to place a block in game
     @
     EventHandler(priority = EventPriority.LOW)
@@ -1039,6 +1058,16 @@ public class PlayerListener implements Listener
                         event.setCancelled(true);
                     }
         }
+    }  @ EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerThrowPotion(PlayerInteractEvent e)
+    {
+    	if((Infected.isPlayerInGame(e.getPlayer()) || Infected.isPlayerInLobby(e.getPlayer())) && !Infected.booleanIsStarted()){
+    		if(e.getPlayer().getItemInHand().getTypeId() == 373)
+    		{
+        		e.setUseItemInHand(Result.DENY);
+    			e.setCancelled(true);
+    		}
+    	}
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   GRENADES
     @
@@ -1163,7 +1192,12 @@ public class PlayerListener implements Listener
                                 		String className = sign.getLine(2).replaceAll("§a", "");
                                 		if(sign.getLine(3).contains("Human"))
                                 		{
-                                    		if(player.hasPermission("Infected.Classes.Human") || player.hasPermission("Infected.Classes.Human."+className))
+                                    		if(className.equalsIgnoreCase("None"))
+                                    		{
+                                    			Main.humanClasses.remove(player.getName());
+                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected human class");	
+                                    		}
+                                    		else if(player.hasPermission("Infected.Classes.Human") || player.hasPermission("Infected.Classes.Human."+className))
                                     		{
                                     			Main.humanClasses.put(player.getName(), className);
                                     			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+sign.getLine(2));
@@ -1172,7 +1206,12 @@ public class PlayerListener implements Listener
                                 		}
                                 		else if(sign.getLine(3).contains("Zombie"))
                                 		{
-                                    		if(player.hasPermission("Infected.Classes.Zombie") || player.hasPermission("Infected.Classes.Zombie."+className))
+                                    		if(className.equalsIgnoreCase("None"))
+                                    		{
+                                    			Main.zombieClasses.remove(player.getName());
+                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected zombie class");	
+                                    		}
+                                    		else if(player.hasPermission("Infected.Classes.Zombie") || player.hasPermission("Infected.Classes.Zombie."+className))
                                     		{
                                     			Main.zombieClasses.put(player.getName(), className);
                                     			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+sign.getLine(2));

@@ -16,6 +16,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -306,57 +307,6 @@ public class Methods
 
 
 
-    @
-    SuppressWarnings("deprecation")
-    public static void tp2LobbyAfter(Player player)
-    {
-        if (!Main.db.getBlocks().isEmpty())
-        {
-            for (Location loc: Main.db.getBlocks().keySet())
-            {
-                loc.getBlock().setType(Main.db.getBlocks().get(loc));
-            }
-        }
-        if (Main.config.getBoolean("ScoreBoard Support"))
-        {
-
-            player.setScoreboard(Main.voteBoard);
-            Main.playingBoard.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Humans:"));
-            Main.playingBoard.resetScores(Bukkit.getOfflinePlayer(ChatColor.DARK_RED + "Zombies:"));
-        }
-        Main.db.getBlocks().clear();
-        player.teleport(Methods.getLocation(Main.config.getString("Lobby")));
-        resetPlayersInventory(player);
-        if (Infected.filesGetShop().getBoolean("Save Items")) player.getInventory().setContents(Infected.playerGetShopInventory(player));
-        Main.Lasthit.remove(player.getName());
-        Main.humanClasses.remove(player.getName());
-        Main.zombieClasses.remove(player.getName());
-        player.setGameMode(GameMode.ADVENTURE);
-        player.updateInventory();
-        player.setLevel(0);
-        Main.Votes.clear();
-        Main.inLobby.add(player.getName());
-        Main.zombies.clear();
-        Main.humans.clear();
-        player.setFireTicks(0);
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-        Main.KillStreaks.remove(player.getName());
-        Main.Booleans.put("Started", false);
-        Main.Booleans.put("BeforeGame", false);
-        Main.Booleans.put("BeforeFirstInf", false);
-        Main.Voted4.clear();
-        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
-        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
-        if (Main.config.getBoolean("DisguiseCraft Support"))
-            if (Main.dcAPI.isDisguised(player) == true)
-                Main.dcAPI.undisguisePlayer(player);
-        if (Main.inGame.size() == 0)
-            Main.Winners.clear();
-
-    }
     public static void newZombieSetUpEveryOne()
     {
         Random r = new Random();
@@ -932,16 +882,6 @@ public class Methods
         }
         return is;
 
-    }@
-    SuppressWarnings("deprecation")
-    public static void resetPlayersInventory(Player player)
-    {
-        player.getInventory().clear();
-        player.getInventory().setHelmet(null);
-        player.getInventory().setChestplate(null);
-        player.getInventory().setLeggings(null);
-        player.getInventory().setBoots(null);
-        player.updateInventory();
     }
     public static void joinInfectHuman(Player player)
     {
@@ -1030,6 +970,13 @@ public class Methods
         }
         if (DidHumansWin)
         {
+        	if(Main.config.getString("Vault Support.Reward") != null){
+        		int rewardMoney = Main.config.getInt("Vault.Support");
+
+                for (Player players: Bukkit.getOnlinePlayers())
+                    if (Main.Winners.contains(players.getName()))
+                    	Main.economy.depositPlayer(players.getName(), rewardMoney);
+        	}
             if (!(Main.config.getString("Command Reward").equalsIgnoreCase(null) || Main.config.getString("Command Reward").equalsIgnoreCase("[]")))
             {
                 for (Player players: Bukkit.getOnlinePlayers())
@@ -1117,28 +1064,6 @@ public class Methods
             Game.START();
         }
     }
-    public static void resetInf()
-    {
-        Infected.booleanBeforeGame(false);
-        Infected.booleanBeforeInfected(false);
-        Infected.booleanStarted(false);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
-        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
-        Main.Winners.clear();
-        Main.humans.clear();
-        Main.zombies.clear();
-        Main.KillStreaks.clear();
-        if (!Main.db.getBlocks().isEmpty())
-        {
-            for (Location loc: Main.db.getBlocks().keySet())
-            {
-                loc.getBlock().setType(Main.db.getBlocks().get(loc));
-            }
-        }
-        Main.db.getBlocks().clear();
-    }
     public static String getTime(Long Time)
     {
         String times = null;
@@ -1175,7 +1100,112 @@ public class Methods
         msg = killtype.replaceAll("<zombie>", ChatColor.RED + zombie).replaceAll("<human>", ChatColor.GREEN + human);
         String cmsg = ChatColor.translateAlternateColorCodes('&', msg);
         return cmsg;
-    }@
+    }
+    @
+    SuppressWarnings("deprecation")
+    public static void resetPlayersInventory(Player player)
+    {
+        player.getInventory().clear();
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
+        player.updateInventory();
+    }
+    @
+    SuppressWarnings("deprecation")
+    public static void tp2LobbyAfter(Player player)
+    {
+        if (!Main.db.getBlocks().isEmpty())
+        {
+            for (Location loc: Main.db.getBlocks().keySet())
+            {
+                loc.getBlock().setType(Main.db.getBlocks().get(loc));
+            }
+        }
+		if(!Main.db.getChests().isEmpty()){
+			for(Location loc : Main.db.getChests().keySet()){
+				if(loc.getBlock().getTypeId()==54) {
+					Chest chest = (Chest) loc.getBlock().getState();
+					chest.getBlockInventory().setContents(ItemSerialization.fromBase64(Main.db.getChests().get(loc)).getContents());
+				}
+			}
+		}
+        if (Main.config.getBoolean("ScoreBoard Support"))
+        {
+
+            player.setScoreboard(Main.voteBoard);
+            Main.playingBoard.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Humans:"));
+            Main.playingBoard.resetScores(Bukkit.getOfflinePlayer(ChatColor.DARK_RED + "Zombies:"));
+        }
+        Main.db.getBlocks().clear();
+        Main.db.clearChests();
+        player.teleport(Methods.getLocation(Main.config.getString("Lobby")));
+        resetPlayersInventory(player);
+        if (Infected.filesGetShop().getBoolean("Save Items")) player.getInventory().setContents(Infected.playerGetShopInventory(player));
+        Main.Lasthit.remove(player.getName());
+        Main.humanClasses.remove(player.getName());
+        Main.zombieClasses.remove(player.getName());
+        player.setGameMode(GameMode.ADVENTURE);
+        player.updateInventory();
+        player.setLevel(0);
+        Main.Votes.clear();
+        Main.inLobby.add(player.getName());
+        Main.zombies.clear();
+        Main.humans.clear();
+        player.setFireTicks(0);
+        player.setHealth(20.0);
+        player.setFoodLevel(20);
+        Main.KillStreaks.remove(player.getName());
+        Main.Booleans.put("Started", false);
+        Main.Booleans.put("BeforeGame", false);
+        Main.Booleans.put("BeforeFirstInf", false);
+        Main.Voted4.clear();
+        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
+        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
+        if (Main.config.getBoolean("DisguiseCraft Support"))
+            if (Main.dcAPI.isDisguised(player) == true)
+                Main.dcAPI.undisguisePlayer(player);
+        if (Main.inGame.size() == 0)
+            Main.Winners.clear();
+
+    }
+
+    public static void resetInf()
+    {
+        Infected.booleanBeforeGame(false);
+        Infected.booleanBeforeInfected(false);
+        Infected.booleanStarted(false);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
+        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
+        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
+        Main.Winners.clear();
+        Main.humans.clear();
+        Main.zombies.clear();
+        Main.KillStreaks.clear();
+        if (!Main.db.getBlocks().isEmpty())
+        {
+            for (Location loc: Main.db.getBlocks().keySet())
+            {
+                loc.getBlock().setType(Main.db.getBlocks().get(loc));
+            }
+        }
+		if(!Main.db.getChests().isEmpty()){
+			for(Location loc : Main.db.getChests().keySet()){
+				if(loc.getBlock().getTypeId()==54) {
+					Chest chest = (Chest) loc.getBlock().getState();
+					chest.getBlockInventory().setContents(ItemSerialization.fromBase64(Main.db.getChests().get(loc)).getContents());
+				}
+			}
+		}
+		Main.db.clearChests();
+        Main.db.getBlocks().clear();
+    }
+    
+    @
     SuppressWarnings("deprecation")
     public static void resetp(Player player)
     {
@@ -1249,6 +1279,7 @@ public class Methods
             }
         }
         Main.db.getBlocks().clear();
+        Main.db.clearChests();
         Main.KillStreaks.clear();
         Main.possibleArenas.clear();
         Main.inLobby.clear();

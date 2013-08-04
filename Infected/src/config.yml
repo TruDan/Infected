@@ -5,7 +5,7 @@
 # |                      Updates                         | #
 # +======================================================+ #
 
-#Check for updates
+# Check for updates
 Check For Updates:
   Enable: true
 
@@ -131,7 +131,7 @@ Armor:
 # |                After Game Rewards                    | #
 # +======================================================+ #
 
-
+SOMETHING RANDOM: TEST
 # Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 Rewards:
 - 351:2,3

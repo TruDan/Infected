@@ -20,7 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -63,8 +62,6 @@ public class Main extends JavaPlugin
     public static File shopfile = null;
     public static YamlConfiguration grenades = null;
     public static File grenadesfile = null;
-    public static FileConfiguration customConfig = null;
-    public static File configFile = null;
 
     //Lists, Strings and Integers Infected needs
     public static int arenaNumber = 0;
@@ -157,7 +154,6 @@ public class Main extends JavaPlugin
         //Create Configs and files
         Infected.filesGetArenas().options().copyDefaults(true);
         Infected.filesGetKillTypes().options().copyDefaults(true);
-        saveDefaultConfig();
         //getConfig().options().copyDefaults(true);
         Infected.filesGetShop().options().copyDefaults(true);
         Infected.filesGetPlayers().options().copyDefaults(true);
@@ -334,23 +330,39 @@ public class Main extends JavaPlugin
     }
 
 
-    @
+    @SuppressWarnings("deprecation")
+	@
     Override
     public void onDisable()
     {
     	
-        //On disable reset players with everything from before
-        for (Player players: Bukkit.getServer().getOnlinePlayers())
-            if (players != null)
-                if (Main.inGame.contains(players.getName()))
-                {
-                    players.sendMessage(Main.I + "Server was reloaded!");
+    	//On disable reset players with everything from before
+    	for (Player player: Bukkit.getServer().getOnlinePlayers())
+    		if (player != null)
+    			if (Main.inGame.contains(player.getName()))
+    			{
+    				player.sendMessage(Main.I + "Server was reloaded!");
+    				player.setHealth(20.0);
+    				player.setFoodLevel(20);
+    				for (PotionEffect reffect: player.getActivePotionEffects())
+    				{
+    					player.removePotionEffect(reffect.getType());
+    				}
+    				player.setGameMode(GameMode.valueOf(Main.gamemode.get(player.getName())));
+    				Main.Lasthit.remove(player.getName());
+                    if (Main.Inventory.containsKey(player.getName())) player.getInventory().setContents(Main.Inventory.get(player.getName()));
+                    if (Main.Armor.containsKey(player.getName())) player.getInventory().setArmorContents(Main.Armor.get(player.getName()));
+                    player.updateInventory();
+                    player.setExp(Main.Exp.get(player.getName()));
+                    player.setLevel(Main.Levels.get(player.getName()));
+                    if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
+                    if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
+                    if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
                 }
-
-                //Empty all the hashmaps and database settings(Blocks)
-        reset();
+        //Empty all the hashmaps and database settings(Blocks)
         db.getBackups().clear();
         db.getBlocks().clear();
+        db.getChests().clear();
         db.saveDB("plugins/Infected/Database.db");
     }
 
@@ -380,127 +392,5 @@ public class Main extends JavaPlugin
     
     
     
-    
-    
-    @
-    SuppressWarnings("deprecation")
-    public static void resetp(Player player)
-    {
 
-        if (Main.config.getBoolean("ScoreBoard Support"))
-        {
-            ScoreboardManager manager = Bukkit.getScoreboardManager();
-            Scoreboard board = manager.getNewScoreboard();
-            board.registerNewObjective("empty", "dummy");
-
-            Objective objective = board.getObjective("empty");
-            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-            player.setScoreboard(board);
-        }
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-        for (PotionEffect reffect: player.getActivePotionEffects())
-        {
-            player.removePotionEffect(reffect.getType());
-        }
-        Methods.resetPlayersInventory(player);
-        player.updateInventory();
-        player.setGameMode(GameMode.valueOf(Main.gamemode.get(player.getName())));
-        Main.Lasthit.remove(player.getName());
-        if (Main.Inventory.containsKey(player.getName())) player.getInventory().setContents(Main.Inventory.get(player.getName()));
-        if (Main.Armor.containsKey(player.getName())) player.getInventory().setArmorContents(Main.Armor.get(player.getName()));
-        player.updateInventory();
-        player.setExp(Main.Exp.get(player.getName()));
-        player.setLevel(Main.Levels.get(player.getName()));
-        if (Main.Spot.containsKey(player.getName())) player.teleport(Main.Spot.get(player.getName()));
-        if (Main.Food.containsKey(player.getName())) player.setFoodLevel(Main.Food.get(player.getName()));
-        if (Main.Health.containsKey(player.getName())) player.setHealth(Main.Health.get(player.getName()));
-        Main.humanClasses.remove(player.getName());
-        Main.zombieClasses.remove(player.getName());
-        Main.inLobby.remove(player.getName());
-        Main.zombies.remove(player.getName());
-        Main.KillStreaks.remove(player.getName());
-        Main.humans.remove(player.getName());
-        Main.inGame.remove(player.getName());
-        Main.Creating.remove(player.getName());
-        Main.Health.remove(player.getName());
-        Main.Food.remove(player.getName());
-        Main.Armor.remove(player.getName());
-        Main.Inventory.remove(player.getName());
-        Main.Spot.remove(player.getName());
-        Main.Winners.remove(player.getName());
-        if (Main.config.getBoolean("DisguiseCraft Support"))
-        {
-            if (Main.dcAPI.isDisguised(player)) Main.dcAPI.undisguisePlayer(player);
-        }
-        if (Main.Voted4.containsKey(player.getName()))
-        {
-            if (Main.Votes.containsKey(Main.Voted4.get(player.getName()))) Main.Votes.put(Main.Voted4.get(player.getName()).toString(), Main.Votes.get(Main.Voted4.get(player.getName())) - 1);
-            Main.Voted4.remove(player.getName());
-
-        }
-    }
-
-    //Reset the game(Method)
-    public static void reset()
-    {
-        for (Player players: Bukkit.getOnlinePlayers())
-        {
-            if (Infected.isPlayerInGame(players))
-            {
-                Infected.resetPlayer(players);
-                if (Main.config.getBoolean("ScoreBoard Support"))
-                {
-                    Methods.updateScoreBoard();
-                }
-            }
-        }
-        Main.db.getBlocks().clear();
-        Main.KillStreaks.clear();
-        Main.possibleArenas.clear();
-        Main.inLobby.clear();
-        Main.humanClasses.clear();
-        Main.zombieClasses.clear();
-        Main.Winners.clear();
-        Main.zombies.clear();
-        Main.humans.clear();
-        Main.inGame.clear();
-        Main.Voted4.clear();
-        Main.Votes.clear();
-        Main.Health.clear();
-        Main.Food.clear();
-        Main.Inventory.clear();
-        Main.Spot.clear();
-        Main.Armor.clear();
-        Main.Booleans.put("Started", false);
-        Main.Booleans.put("BeforeGame", false);
-        Main.Booleans.put("BeforeFirstInf", false);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
-        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
-        resetInf();
-    }
-    public static void resetInf()
-    {
-        Infected.booleanBeforeGame(false);
-        Infected.booleanBeforeInfected(false);
-        Infected.booleanStarted(false);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timestart);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeLimit);
-        Bukkit.getServer().getScheduler().cancelTask(Main.timeVote);
-        Bukkit.getServer().getScheduler().cancelTask(Main.queuedtpback);
-        Main.Winners.clear();
-        Main.humans.clear();
-        Main.zombies.clear();
-        Main.KillStreaks.clear();
-        if (!Main.db.getBlocks().isEmpty())
-        {
-            for (Location loc: Main.db.getBlocks().keySet())
-            {
-                loc.getBlock().setType(Main.db.getBlocks().get(loc));
-            }
-        }
-        Main.db.getBlocks().clear();
-    }
 }

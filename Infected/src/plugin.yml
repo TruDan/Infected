@@ -3,7 +3,7 @@ main: me.xxsniperzzxx_sd.infected.Main
 author: xXSniperzzXx_SD
 version: 1.8.8
 description: MW3 Infected for Minecraft!
-softdepend: [DisguiseCraft, TagApi, ProtocolLib]
+softdepend: [DisguiseCraft, TagApi, ProtocolLib, Vault]
 website: www.Youtube.com/user/SNiPERzCiinema
 commands:
     Infected:
