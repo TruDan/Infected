@@ -1148,232 +1148,227 @@ public class PlayerListener implements Listener
     {
         "deprecation"
     })@ EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerBuyEvent(PlayerInteractEvent event)
+    public void onPlayerClickSign(PlayerInteractEvent event)
     {
-        if (!event.isCancelled())
-        {
-            Player player = event.getPlayer();
-            if (player.getItemInHand().getType() == Material.BOW)
-            {
-                event.setUseItemInHand(Result.DEFAULT);
-                event.setCancelled(false);
-            }
-            else
-            {
-                if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                {
-                    Block b = event.getClickedBlock();
-                    if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
-                    {
-                        Sign sign = ((Sign) b.getState());
-                        if (sign.getLine(0).contains("[Inf]") && sign.getLine(1).toLowerCase().contains("click to use"))
-                        {
-                            String command = sign.getLine(2).replaceAll("§6", "");
-                            String commandarg = sign.getLine(3).replaceAll("§6", "");
-                            event.getPlayer().performCommand("Infected " + command + " " + commandarg);
-                        }
-                    }
-                }
-                if (Methods.isInLobby(player) || Methods.isPlayer(player))
-                {
-                    if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                    {
-                        Block b = event.getClickedBlock();
-                        if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
-                        {
-                            if (Files.getShop().getBoolean("Use"))
-                            {
-                                int points = Methods.getPoints(player);
-                                Sign sign = ((Sign) b.getState());
-                                if (sign.getLine(0).contains("[Infected]"))
-                                {
-                                	if(sign.getLine(1).contains("Class"))
-                                	{
-                                		String className = sign.getLine(2).replaceAll("§a", "");
-                                		if(sign.getLine(3).contains("Human"))
-                                		{
-                                    		if(className.equalsIgnoreCase("None"))
-                                    		{
-                                    			Main.humanClasses.remove(player.getName());
-                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected human class");	
-                                    		}
-                                    		else if(player.hasPermission("Infected.Classes.Human") || player.hasPermission("Infected.Classes.Human."+className))
-                                    		{
-                                    			Main.humanClasses.put(player.getName(), className);
-                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+sign.getLine(2));
-                                    	
-                                    		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
-                                		}
-                                		else if(sign.getLine(3).contains("Zombie"))
-                                		{
-                                    		if(className.equalsIgnoreCase("None"))
-                                    		{
-                                    			Main.zombieClasses.remove(player.getName());
-                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected zombie class");	
-                                    		}
-                                    		else if(player.hasPermission("Infected.Classes.Zombie") || player.hasPermission("Infected.Classes.Zombie."+className))
-                                    		{
-                                    			Main.zombieClasses.put(player.getName(), className);
-                                    			player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+sign.getLine(2));
-                                    	
-                                    		}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
-                                		}
-                                }
-                                else
-                                {
-                                	String prices = sign.getLine(3).replaceAll("§4Cost: ", "");
-                                	int price = Integer.valueOf(prices);
-                                	String itemstring = sign.getLine(1).replaceAll("§f", "").replaceAll("§7", "");
-                                	
-                                	String itemname = null;
-                                	short itemdata = 0;
-                                	String s = itemstring;
-                                	if (s.contains(":"))
-                                	{
-                                		String[] s1 = s.split(":");
-                                		itemname = s1[0];
-                                		itemdata = Short.valueOf(s1[1]);
-                                	}
-                                	else
-                                	{
-                                		itemname = s;
-                                		itemdata = 0;
-                                	}
-                                	Material im = null;
-                                	for (Material item: Material.values())
-                                		if (item.toString().equalsIgnoreCase(itemname))
-                                		{
-                                			im = item;
-                                			break;
-                                		}
-	                                    if (im != null)
-	                                    {
-	                                        Material item = Material.getMaterial(itemname);
-	                                        if (player.hasPermission("Infected.Shop") || player.hasPermission("Infected.Shop." + item.getId()))
-	                                        {
-	                                            if (price < points + 1)
-	                                            {
-	                                                Methods.setPoints(player, points - price);
-	                                                ItemStack stack = new ItemStack(item);
-	                                                stack.setDurability(itemdata);
-	                                                if (!player.getInventory().contains(stack))
-	                                                {
-	                                                    player.getInventory().addItem(stack);
-	                                                    if (Files.getShop().getBoolean("Save Items")) Infected.playerAddToShopInventory(player, stack);
-	                                                }
-	                                                else
-	                                                    player.getInventory().addItem(new ItemStack(item, +1));
-	                                                player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + item);
-	                                                if (Files.getShop().getBoolean("Save Items") || Files.getShop().getIntegerList("Save These Items No Matter What").contains(item.getId())) Infected.playerSaveShopInventory(player);
-	                                            }
-	                                            else
-	                                                player.sendMessage(Main.I + "Not enough points!");
-	                                            Files.savePlayers();
-	                                            player.updateInventory();
-	                                        }
-	                                        else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
-	                                    }
-	                                    else
-	                                    {
-	                                        if (Files.getShop().contains(itemname))
-	                                        {
-	                                            ItemStack is = Methods.getItemStack(Files.getShop().getString(itemname));
-	                                            for (Material items: Material.values())
-	                                            {
-	                                                if (items == is.getType())
-	                                                {
-	                                                    im = items;
-	                                                    break;
-	                                                }
-	                                            }
-	                                            if (price < points + 1)
-	                                            {
-	                                                if (player.hasPermission("Infected.Shop") || player.hasPermission("Infected.Shop." + itemname))
-	                                                {
-	                                                    Methods.setPoints(player, points - price);
-	                                                    ItemMeta i = is.getItemMeta();
-	                                                    if (!player.getInventory().contains(is))
-	                                                    {
-	                                                        i.setDisplayName("§e" + itemname);
-	                                                        is.setItemMeta(i);
-	                                                        player.getInventory().addItem(is);
-	                                                        if ((Files.getShop().getBoolean("Save Items") || Files.getShop().getIntegerList("Save These Items No Matter What").contains(is.getTypeId())) && (!Infected.filesGetGrenades().contains(String.valueOf(is.getTypeId())))) Infected.playerSaveShopInventory(player);
-	                                                    }
-	                                                    else
-	                                                    {
-	                                                        i.setDisplayName("§e" + itemname);
-	                                                        is.setItemMeta(i);
-	                                                        player.getInventory().addItem(is);
-	                                                    }
-	                                                    player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + itemname);
-	                                                    if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(is.getTypeId())))) Infected.playerSaveShopInventory(player);
-	                                                }
-	                                            }
-	                                            else
-	                                            {
-	                                                player.sendMessage(Main.I + "Not enough points!");
-	                                            }
-	                                            Files.savePlayers();
-	                                            player.updateInventory();
-	                                            event.setCancelled(true);
-	                                        }
-	                                        Location loc = event.getClickedBlock().getLocation();
-	                                        if (Main.db.isSign(loc))
-	                                        {
-	                                            String i = Main.db.getSignsItem(loc);
-	                                            String itemi = null;
-	                                            short itemd = 0;
-	                                            if (i.contains(":"))
-	                                            {
-	                                                String[] i1 = i.split(":");
-	                                                itemi = i1[0];
-	                                                itemdata = Short.valueOf(i1[1]);
-	                                            }
-	                                            else
-	                                            {
-	                                                itemi = i;
-	                                                itemd = 0;
-	                                            }
-	                                            Material item = Material.getMaterial(Integer.valueOf(itemi));
-	                                            if (price < points + 1)
-	                                            {
-	                                                Methods.setPoints(player, points - price);
-	                                                ItemStack stack = new ItemStack(Material.getMaterial(Integer.valueOf(itemi)));
-	                                                stack.setDurability(itemd);
-	                                                if (!player.getInventory().contains(stack))
-	                                                {
-	                                                    player.getInventory().addItem(stack);
-	                                                    if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(item.getId())))) Infected.playerSaveShopInventory(player);
-	                                                }
-	                                                else
-	                                                    player.getInventory().addItem(new ItemStack(item, +1));
-	                                                player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + item);
-	                                                if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(item.getId())))) Infected.playerSaveShopInventory(player);
-	
-	                                            }
-	                                            else
-	                                                player.sendMessage(Main.I + "Not enough points!");
-	                                            Files.savePlayers();
-	                                            player.updateInventory();
-	                                        }
-	                                    }
-	                                }
-	                            }
-	                            else if ((event.getClickedBlock().getTypeId() == 330 || event.getClickedBlock().getTypeId() == 96 || event.getClickedBlock().getTypeId() == 324 || event.getClickedBlock().getTypeId() == 69 || event.getClickedBlock().getTypeId() == 77 || event.getClickedBlock().getTypeId() == 143 || event.getClickedBlock().getTypeId() == 147 || event.getClickedBlock().getTypeId() == 148 || event.getClickedBlock().getTypeId() == 70 || event.getClickedBlock().getTypeId() == 72) && !Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())) && !plugin.getConfig().getBoolean("Allow Interacting"))
-	                            {
-	                                event.setCancelled(true);
-	                            }
-	                        }
-	                        else if ((event.getClickedBlock().getTypeId() == 330 || event.getClickedBlock().getTypeId() == 96 || event.getClickedBlock().getTypeId() == 324 || event.getClickedBlock().getTypeId() == 69 || event.getClickedBlock().getTypeId() == 77 || event.getClickedBlock().getTypeId() == 143 || event.getClickedBlock().getTypeId() == 147 || event.getClickedBlock().getTypeId() == 148 || event.getClickedBlock().getTypeId() == 70 || event.getClickedBlock().getTypeId() == 72) && !Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())) && !plugin.getConfig().getBoolean("Allow Interacting"))
-	                        {
-	                            event.setCancelled(true);
-	                        }
-	                    }
-	                }
-	            }
-	        }
-        }
-
+    	Player player = event.getPlayer();
+    	if (player.getItemInHand().getType() == Material.BOW)
+    	{
+    		event.setUseItemInHand(Result.DEFAULT);
+    		event.setCancelled(false);
+    	}
+    	else
+    	{
+    		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+    		{
+    			Block b = event.getClickedBlock();
+    			if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
+    			{			
+    				Sign sign = ((Sign) b.getState());
+    				if (sign.getLine(0).contains("[Inf]") && sign.getLine(1).toLowerCase().contains("click to use"))
+    				{
+    					String command = sign.getLine(2).replaceAll("§6", "");
+    					String commandarg = sign.getLine(3).replaceAll("§6", "");
+    					event.getPlayer().performCommand("Infected " + command + " " + commandarg);
+    				}
+    			}
+    		}
+    		if (Methods.isInLobby(player) || Methods.isPlayer(player))
+    		{
+    			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+    			{
+    				Block b = event.getClickedBlock();
+    				if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN)
+    				{
+    					if (Files.getShop().getBoolean("Use"))
+    					{
+    						int points = Methods.getPoints(player);
+    						Sign sign = ((Sign) b.getState());
+    						if (sign.getLine(0).contains("[Infected]"))
+    						{
+    							if(sign.getLine(1).contains("Class"))
+    							{
+    								String className = sign.getLine(2).replaceAll("§a", "");
+    								if(sign.getLine(3).contains("Human"))
+    								{
+    									if(className.equalsIgnoreCase("None"))
+    									{
+    										Main.humanClasses.remove(player.getName());
+    										player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected human class");	
+    									}
+    									else if(player.hasPermission("Infected.Classes.Human") || player.hasPermission("Infected.Classes.Human."+className))
+    									{
+    										Main.humanClasses.put(player.getName(), className);
+    										player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current human class is: "+sign.getLine(2));
+    										
+    									}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+    								}
+    								else if(sign.getLine(3).contains("Zombie"))
+    								{
+    									if(className.equalsIgnoreCase("None"))
+    									{
+    										Main.zombieClasses.remove(player.getName());
+    										player.sendMessage(Main.I+ChatColor.DARK_AQUA+"You no longer have a selected zombie class");	
+    									}
+    									else if(player.hasPermission("Infected.Classes.Zombie") || player.hasPermission("Infected.Classes.Zombie."+className))
+    									{
+    										Main.zombieClasses.put(player.getName(), className);
+    										player.sendMessage(Main.I+ChatColor.DARK_AQUA+"Your current zombie class is: "+sign.getLine(2));
+    										
+    									}else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+    								}
+    							}
+    							else
+    							{
+    								String prices = sign.getLine(3).replaceAll("§4Cost: ", "");
+    								int price = Integer.valueOf(prices);
+    								String itemstring = sign.getLine(1).replaceAll("§f", "").replaceAll("§7", "");	
+    								String itemname = null;
+    								short itemdata = 0;
+    								String s = itemstring;
+    								if (s.contains(":"))
+    								{
+    									String[] s1 = s.split(":");
+    									itemname = s1[0];
+    									itemdata = Short.valueOf(s1[1]);
+    								}
+    								else
+    								{
+    									itemname = s;
+    									itemdata = 0;
+    								}
+    								Material im = null;
+    								for (Material item: Material.values())
+    									if (item.toString().equalsIgnoreCase(itemname))
+    									{
+    										im = item;
+    										break;
+    									}
+    								if (im != null)
+    								{
+    									Material item = Material.getMaterial(itemname);
+    									if (player.hasPermission("Infected.Shop") || player.hasPermission("Infected.Shop." + item.getId()))
+    									{
+    										if (price < points + 1)
+    										{
+    											Methods.setPoints(player, points - price);
+    											ItemStack stack = new ItemStack(item);
+    											stack.setDurability(itemdata);
+    											if (!player.getInventory().contains(stack))
+    											{
+    												player.getInventory().addItem(stack);
+    												if (Files.getShop().getBoolean("Save Items")) Infected.playerAddToShopInventory(player, stack);
+    											}
+    											else
+    												player.getInventory().addItem(new ItemStack(item, +1));
+    											player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + item);
+    											if (Files.getShop().getBoolean("Save Items") || Files.getShop().getIntegerList("Save These Items No Matter What").contains(item.getId())) Infected.playerSaveShopInventory(player);
+    										}
+    										else
+    											player.sendMessage(Main.I + "Not enough points!");
+    										Files.savePlayers();
+    										player.updateInventory();
+    									}
+    									else player.sendMessage(Main.I + ChatColor.RED + "You don't have permission to buy this item!");
+    								}
+    								else
+    								{
+    									if (Files.getShop().contains(itemname))
+    									{
+    										ItemStack is = Methods.getItemStack(Files.getShop().getString(itemname));
+    										for (Material items: Material.values())
+    										{
+    											if (items == is.getType())
+    											{
+    												im = items;
+    												break;
+    											}
+    										}
+    										if (price < points + 1)
+    										{
+    											if (player.hasPermission("Infected.Shop") || player.hasPermission("Infected.Shop." + itemname))
+    											{
+    												Methods.setPoints(player, points - price);
+    												ItemMeta i = is.getItemMeta();
+    												if (!player.getInventory().contains(is))
+    												{
+    													i.setDisplayName("§e" + itemname);
+    													is.setItemMeta(i);
+    													player.getInventory().addItem(is);
+    													if ((Files.getShop().getBoolean("Save Items") || Files.getShop().getIntegerList("Save These Items No Matter What").contains(is.getTypeId())) && (!Infected.filesGetGrenades().contains(String.valueOf(is.getTypeId())))) Infected.playerSaveShopInventory(player);
+    												}
+    												else
+    												{
+    													i.setDisplayName("§e" + itemname);
+    													is.setItemMeta(i);
+    													player.getInventory().addItem(is);
+    												}
+    												player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + itemname);
+    												if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(is.getTypeId())))) Infected.playerSaveShopInventory(player);
+    											}
+    										}
+    										else
+    										{
+    											player.sendMessage(Main.I + "Not enough points!");
+    										}
+    										Files.savePlayers();
+    										player.updateInventory();
+    										event.setCancelled(true);
+    									}
+    									Location loc = event.getClickedBlock().getLocation();
+    									if (Main.db.isSign(loc))
+    									{
+    										String i = Main.db.getSignsItem(loc);
+    										String itemi = null;
+    										short itemd = 0;
+    										if (i.contains(":"))
+    										{
+    											String[] i1 = i.split(":");
+    											itemi = i1[0];
+    											itemdata = Short.valueOf(i1[1]);
+    										}
+    										else
+    										{
+    											itemi = i;
+    											itemd = 0;
+    										}
+    										Material item = Material.getMaterial(Integer.valueOf(itemi));
+    										if (price < points + 1)
+    										{
+    											Methods.setPoints(player, points - price);
+    											ItemStack stack = new ItemStack(Material.getMaterial(Integer.valueOf(itemi)));
+    											stack.setDurability(itemd);
+    											if (!player.getInventory().contains(stack))
+    											{
+    												player.getInventory().addItem(stack);
+    												if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(item.getId())))) Infected.playerSaveShopInventory(player);
+    											}
+    											else
+    												player.getInventory().addItem(new ItemStack(item, +1));
+    											player.sendMessage(Main.I + ChatColor.DARK_AQUA + "You have bought a " + item);
+    											if (Files.getShop().getBoolean("Save Items") && (!Infected.filesGetGrenades().contains(String.valueOf(item.getId())))) Infected.playerSaveShopInventory(player);
+    											
+    										}
+    										else
+    											player.sendMessage(Main.I + "Not enough points!");
+    										Files.savePlayers();
+    										player.updateInventory();
+    									}
+    								}
+    							}
+    						}
+    						else if ((event.getClickedBlock().getTypeId() == 330 || event.getClickedBlock().getTypeId() == 96 || event.getClickedBlock().getTypeId() == 324 || event.getClickedBlock().getTypeId() == 69 || event.getClickedBlock().getTypeId() == 77 || event.getClickedBlock().getTypeId() == 143 || event.getClickedBlock().getTypeId() == 147 || event.getClickedBlock().getTypeId() == 148 || event.getClickedBlock().getTypeId() == 70 || event.getClickedBlock().getTypeId() == 72) && !Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())) && !plugin.getConfig().getBoolean("Allow Interacting"))
+    						{
+    							event.setCancelled(true);
+    						}
+    					}
+    					else if ((event.getClickedBlock().getTypeId() == 330 || event.getClickedBlock().getTypeId() == 96 || event.getClickedBlock().getTypeId() == 324 || event.getClickedBlock().getTypeId() == 69 || event.getClickedBlock().getTypeId() == 77 || event.getClickedBlock().getTypeId() == 143 || event.getClickedBlock().getTypeId() == 147 || event.getClickedBlock().getTypeId() == 148 || event.getClickedBlock().getTypeId() == 70 || event.getClickedBlock().getTypeId() == 72) && !Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())) && !plugin.getConfig().getBoolean("Allow Interacting"))
+    					{
+    						event.setCancelled(true);
+    					}
+    				}
+    			}
+    		}
+    	}
     }
 
     @
