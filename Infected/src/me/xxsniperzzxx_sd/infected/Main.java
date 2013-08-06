@@ -263,7 +263,7 @@ public class Main extends JavaPlugin
         //Get the Commands class and the Listener
         getCommand("Infected").setExecutor(new Commands(this));
         PlayerListener PlayerListener = new PlayerListener(this);
-        TeleportFix TeleportFix = new TeleportFix(this, this.getServer());
+        TeleportFix TeleportFix = new TeleportFix(this);
         pm.registerEvents(PlayerListener, this);
         pm.registerEvents(TeleportFix, this);
 

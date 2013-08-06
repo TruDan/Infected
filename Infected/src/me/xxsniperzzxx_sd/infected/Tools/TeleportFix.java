@@ -1,134 +1,99 @@
 package me.xxsniperzzxx_sd.infected.Tools;
+ 
 import java.util.ArrayList;
 import java.util.List;
+ 
+import me.xxsniperzzxx_sd.infected.Infected;
 import me.xxsniperzzxx_sd.infected.Main;
-import me.xxsniperzzxx_sd.infected.Methods;
-import net.minecraft.server.v1_6_R2.EntityPlayer;
-import net.minecraft.server.v1_6_R2.EntityTracker;
-import net.minecraft.server.v1_6_R2.EntityTrackerEntry;
-import net.minecraft.server.v1_6_R2.WorldServer;
-import org.bukkit.Bukkit;
+
 import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_6_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
+ 
+//###########################################################################
 
-import pgDev.bukkit.DisguiseCraft.disguise.Disguise;
-import pgDev.bukkit.DisguiseCraft.disguise.DisguiseType;
-public class TeleportFix implements Listener
-{
-    public Main plugin;
-    private static Server server;
-    private final int TELEPORT_FIX_DELAY = 20; // ticks
-    public TeleportFix(Main plugin, Server server)
-    {
+//TODO: Make it so when a player is disguised it won't hide()/show() them 
+//TODO: Make Main.java refer to this instead of old teleport fix
+
+//###########################################################################
+
+
+public class TeleportFix implements Listener {
+    private Server server;
+    private Plugin plugin;
+    
+    private final int TELEPORT_FIX_DELAY = 15; // ticks
+    
+    public TeleportFix(Plugin plugin) {
         this.plugin = plugin;
-        TeleportFix.server = server;
-    }@
-    EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerTeleport(PlayerTeleportEvent event)
-    {
+        this.server = plugin.getServer();
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+ 
         final Player player = event.getPlayer();
-        if (plugin.getConfig().getBoolean("Teleport Bug Fix"))
-        {
-            if (player.isOnline() && (Main.inGame.contains(player.getName()) || Main.inLobby.contains(player.getName())))
-            {
-                final int visibleDistance = server.getViewDistance() * 16;
-                // Fix the visibility issue one tick later
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
-                {@
-                    Override
-                    public void run()
-                    {
-                        // Refresh nearby clients
-                        updateEntities(getPlayersWithin(player, visibleDistance));
+        final int visibleDistance = server.getViewDistance() * 16;
+        
+        // Fix the visibility issue one tick later
+        server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+                // Refresh nearby clients
+                final List<Player> nearby = getPlayersWithin(player, visibleDistance);
+                
+                // Hide every player
+                updateEntities(player, nearby, false);
+                
+                // Then show them again
+                server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        updateEntities(player, nearby, true);
                     }
-                }, TELEPORT_FIX_DELAY);
+                }, 1);
             }
+        }, TELEPORT_FIX_DELAY);
+    }
+    
+    private void updateEntities(Player tpedPlayer, List<Player> players, boolean visible) {
+        // Hide or show every player to tpedPlayer
+        // and hide or show tpedPlayer to every player.
+        for (Player player : players) {
+        	if(Infected.isPlayerInGame(player) || Infected.isPlayerInLobby(player)){
+        		if(Main.config.getBoolean("DisguiseCraft Support")){
+        			if (visible){
+        				if(!Main.dcAPI.isDisguised(player))	tpedPlayer.showPlayer(player);
+        				if(!Main.dcAPI.isDisguised(tpedPlayer))	player.showPlayer(tpedPlayer);
+        			}else{
+        				if(!Main.dcAPI.isDisguised(player))	tpedPlayer.hidePlayer(player);
+        				if(!Main.dcAPI.isDisguised(player)) player.hidePlayer(tpedPlayer);
+        			}
+        		}else{
+        			if (visible){
+        				tpedPlayer.showPlayer(player);
+        				player.showPlayer(tpedPlayer);
+        			}else{
+        				tpedPlayer.hidePlayer(player);
+        				player.hidePlayer(tpedPlayer);
+        			}
+        		}
+        	}
         }
     }
-    public static void updateEntities(List < Player > observers)
-    {
-        // Refresh every single player
-        for (final Player player: observers)
-        {
-        	if(Main.inGame.contains(player.getName()) || Main.inLobby.contains(player.getName())){
-
-	            updateEntity(player, observers);
-	            if (Main.config.getBoolean("DisguiseCraft Support") == true)
-	            {
-	            	if(Main.dcAPI.isDisguised(player))
-	            		Methods.disguisePlayer(player);
-	            }
-	            if (Main.config.getBoolean("DisguiseCraft Support") == true)
-	            {
-	            	 Main.dcAPI.disguisePlayer(player, new Disguise(Main.dcAPI.newEntityID(), DisguiseType.Chicken));
-	            	 Bukkit.getScheduler().scheduleSyncDelayedTask(Main.me, new Runnable()
-	                 {@
-	                     Override
-	                     public void run()
-	                     {
-	
-	                 	Main.dcAPI.undisguisePlayer(player);
-	                 	if(Main.zombies.contains(player.getName()))
-	    	            	Methods.disguisePlayer(player);
-	                     }
-	
-	                 }, 2L); 
-	            }
-            }
-        }
-    }@
-    SuppressWarnings("unchecked")
-    public static void updateEntity(Entity entity, List < Player > observers)
-    {
-        World world = entity.getWorld();
-        WorldServer worldServer = ((CraftWorld) world).getHandle();
-        EntityTracker tracker = worldServer.tracker;
-        EntityTrackerEntry entry = (EntityTrackerEntry) tracker.trackedEntities
-            .get(entity.getEntityId());
-        List < EntityPlayer > nmsPlayers = getNmsPlayers(observers);
-        // Force Minecraft to resend packets to the affected clients
-        if (!entry.trackedPlayers.isEmpty())
-        {
-            entry.trackedPlayers.removeAll(nmsPlayers);
-            entry.scanPlayers(nmsPlayers);
-        }
-    }
-    private static List < EntityPlayer > getNmsPlayers(List < Player > players)
-    {
-        List < EntityPlayer > nsmPlayers = new ArrayList < EntityPlayer > ();
-        for (Player bukkitPlayer: players)
-        {
-            CraftPlayer craftPlayer = (CraftPlayer) bukkitPlayer;
-            nsmPlayers.add(craftPlayer.getHandle());
-        }
-        return nsmPlayers;
-    }
-    public static List < Player > getPlayersWithin(Player player, int distance)
-    {
-        List < Player > res = new ArrayList < Player > ();
+    
+    public List<Player> getPlayersWithin(Player player, int distance) {
+        List<Player> res = new ArrayList<Player>();
         int d2 = distance * distance;
-        for (Player p: server.getOnlinePlayers())
-        {
-
-            if (Main.config.getBoolean("DisguiseCraft Support")){
-            	if ((!Main.dcAPI.isDisguised(p)) && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2)
-                {
-                    res.add(p);
-                }
-            }else{
-                if (p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2)
-                {
-                    res.add(p);
-                }	
-            }
+        for (Player p : server.getOnlinePlayers()) {
+        	if(Infected.isPlayerInGame(p) || Infected.isPlayerInLobby(p))
+	            if (p != player && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2) {
+	                res.add(p);
+	            }
         }
         return res;
     }

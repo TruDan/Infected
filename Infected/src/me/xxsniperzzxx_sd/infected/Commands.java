@@ -5,7 +5,6 @@ import java.util.List;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedPlayerJoinEvent;
 import me.xxsniperzzxx_sd.infected.Tools.Files;
-import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -385,22 +384,6 @@ public class Commands implements CommandExecutor
                     return true;
                 }
 
-                ///////////////////////////////////////////////////////////////////////////////////////////Refresh
-                else if(args[0].equalsIgnoreCase("Refresh"))
-                {
-
-                    if (!sender.hasPermission("Infected.Refresh"))
-                    {
-                        sender.sendMessage(Methods.sendMessage("Error_NoPermission", null, null, null));
-                        return true;
-                    }
-                    for(Player playing : Bukkit.getOnlinePlayers()){
-                    	if(plugin.inGame.contains(playing.getName()) || plugin.inLobby.contains(playing.getName())){
-                    		TeleportFix.updateEntities(TeleportFix.getPlayersWithin(playing, Bukkit.getServer().getViewDistance() * 16));
-                    	}
-                    }
-                    sender.sendMessage("Refreshed all the players everyone playing should see.");
-                }
                 ///////////////////////////////////////////////////////////////////////////////////////////INFO
                 else if(args[0].equalsIgnoreCase("Info"))
                 {

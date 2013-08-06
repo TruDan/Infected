@@ -4,7 +4,6 @@ import java.util.Random;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedGameStartEvent;
 import me.xxsniperzzxx_sd.infected.Events.InfectedVoteStartEvent;
-import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -275,14 +274,6 @@ public class Game
                                                                 if (Main.inGame.contains(playing.getName()))
                                                                 	playing.setLevel(timeleft);
                                                             }
-                                                            if (Main.GtimeLimit - timeleft == 10)
-                                                                for(final Player playing : Bukkit.getOnlinePlayers()){
-                                                                	if(Main.inGame.contains(playing.getName()) || Main.inLobby.contains(playing.getName())){
-
-                                                                        
-                                                                		TeleportFix.updateEntities(TeleportFix.getPlayersWithin(playing, Bukkit.getServer().getViewDistance() * 16));
-                                                                	}
-                                                                }
                                                             if(timeleft == 5 || timeleft == 4 ||timeleft == 3||timeleft == 2||timeleft == 1){
                                                            	 for (Player playing: Bukkit.getServer().getOnlinePlayers())
                                                                 {
