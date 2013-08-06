@@ -57,7 +57,7 @@ Time:
 Chance To Be Pig Zombie: 20
 Chance To Be NPC Zombie: 20
 
-# Commands players can use inside Infected(Ops can use all commands regardless of being in Infected)
+# Commands players can use inside Infected they have to be in lowercase (Ops can use all commands regardless of being in Infected)
 Allowed Commands:
 - /list
 - /tell
@@ -131,7 +131,6 @@ Armor:
 # |                After Game Rewards                    | #
 # +======================================================+ #
 
-SOMETHING RANDOM: TEST
 # Infected's Item Codes  -----   ItemID:DamageValue,Amount-EnchantmentID@EnchantmentLevel%Item_Name
 Rewards:
 - 351:2,3
