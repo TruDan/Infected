@@ -440,7 +440,7 @@ public class Commands implements CommandExecutor
                         }
                     	Player player = (Player)sender;
 
-                    if (plugin.inGame.contains(player.getName()))
+                    if (plugin.inGame.contains(player.getName()) && Infected.booleanIsStarted())
                     {
 	                	if(Main.humans.contains(player))
 		                    for (Player playing: Bukkit.getServer().getOnlinePlayers())
@@ -481,7 +481,7 @@ public class Commands implements CommandExecutor
                     else
                     {
                         //If the player tries to suicide and they arnt in the lobby
-                        player.sendMessage(plugin.I + "Your not even in a game!");
+                        player.sendMessage(plugin.I + "Your not even in started a game!");
                         return true;
                     }
                 }
