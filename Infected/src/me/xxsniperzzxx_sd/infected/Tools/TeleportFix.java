@@ -14,13 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
  
-//###########################################################################
-
-//TODO: Make it so when a player is disguised it won't hide()/show() them 
-//TODO: Make Main.java refer to this instead of old teleport fix
-
-//###########################################################################
-
 
 public class TeleportFix implements Listener {
     private Server server;
@@ -37,14 +30,12 @@ public class TeleportFix implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
  
         final Player player = event.getPlayer();
-        final int visibleDistance = server.getViewDistance() * 16;
-        
         // Fix the visibility issue one tick later
         server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
                 // Refresh nearby clients
-                final List<Player> nearby = getPlayersWithin(player, visibleDistance);
+                final List<Player> nearby = getPlayersInInfected();
                 
                 // Hide every player
                 updateEntities(player, nearby, false);
@@ -60,7 +51,8 @@ public class TeleportFix implements Listener {
         }, TELEPORT_FIX_DELAY);
     }
     
-    private void updateEntities(Player tpedPlayer, List<Player> players, boolean visible) {
+    
+    public void updateEntities(Player tpedPlayer, List<Player> players, boolean visible) {
         // Hide or show every player to tpedPlayer
         // and hide or show tpedPlayer to every player.
         for (Player player : players) {
@@ -86,15 +78,11 @@ public class TeleportFix implements Listener {
         }
     }
     
-    public List<Player> getPlayersWithin(Player player, int distance) {
+    public List<Player> getPlayersInInfected() {
         List<Player> res = new ArrayList<Player>();
-        int d2 = distance * distance;
-        for (Player p : server.getOnlinePlayers()) {
+        for (Player p : server.getOnlinePlayers()) 
         	if(Infected.isPlayerInGame(p) || Infected.isPlayerInLobby(p))
-	            if (p != player && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(player.getLocation()) <= d2) {
-	                res.add(p);
-	            }
-        }
+	              res.add(p);
         return res;
     }
 }
