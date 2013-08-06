@@ -1059,10 +1059,15 @@ public class Methods
         }
         updateScoreBoard();
         Main.Winners.clear();
-        if (Main.inGame.size() >= Main.config.getInt("Automatic Start.Minimum Players") && Infected.booleanIsStarted() == false && Infected.booleanIsBeforeGame() == false && Infected.booleanIsBeforeInfected() == false && Main.config.getBoolean("Automatic Start.Use"))
-        {
-            Game.START();
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.me, new Runnable() {
+            @Override
+            public void run() {
+            	if (Main.inGame.size() >= Main.config.getInt("Automatic Start.Minimum Players") && Infected.booleanIsStarted() == false && Infected.booleanIsBeforeGame() == false && Infected.booleanIsBeforeInfected() == false && Main.config.getBoolean("Automatic Start.Use"))
+            	{
+            		Game.START();
+            	}
+            }
+        }, 10*60);
     }
     public static String getTime(Long Time)
     {

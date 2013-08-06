@@ -5,7 +5,6 @@ import java.util.List;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedPlayerJoinEvent;
 import me.xxsniperzzxx_sd.infected.Tools.Files;
-import me.xxsniperzzxx_sd.infected.Tools.TeleportFix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -95,8 +94,11 @@ public class Commands implements CommandExecutor
             		return true;
             	}
             	Player player = (Player)sender;
-
-            	if(args.length == 3){
+            	if(Infected.booleanIsStarted()){
+            		sender.sendMessage(plugin.I + ChatColor.RED + "Please choose your class before the game starts!");
+            		return true;
+            	}
+            	else if(args.length == 3){
             		if(args[1].equalsIgnoreCase("Human"))
             		{
 
