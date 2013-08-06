@@ -1075,7 +1075,7 @@ public class PlayerListener implements Listener
     public void onPlayerThrowEvent(PlayerInteractEvent event)
     {
     	final Player player = event.getPlayer();
-    	if (Main.inGame.contains(player.getName()) && Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())))
+    	if ((event.getAction()==Action.LEFT_CLICK_AIR ||event.getAction()==Action.RIGHT_CLICK_AIR || event.getAction()==Action.LEFT_CLICK_BLOCK || event.getAction()==Action.RIGHT_CLICK_BLOCK) && Main.inGame.contains(player.getName()) && Files.getGrenades().contains(String.valueOf(player.getItemInHand().getTypeId())))
             {
                 if (Infected.booleanIsStarted() && Files.getGrenades().getBoolean("Use"))
                 {
