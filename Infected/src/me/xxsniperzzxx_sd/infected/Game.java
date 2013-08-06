@@ -4,7 +4,6 @@ import java.util.Random;
 
 import me.xxsniperzzxx_sd.infected.Events.InfectedGameStartEvent;
 import me.xxsniperzzxx_sd.infected.Events.InfectedVoteStartEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -274,6 +273,12 @@ public class Game
                                                                 if (Main.inGame.contains(playing.getName()))
                                                                 	playing.setLevel(timeleft);
                                                             }
+                                                            if (Main.GtimeLimit - timeleft == 10)
+                                                                for(final Player playing : Bukkit.getOnlinePlayers()){
+                                                                	if(Main.inGame.contains(playing.getName()) || Main.inLobby.contains(playing.getName())){
+                                                                		playing.teleport(playing.getLocation());
+                                                                	}
+                                                                }
                                                             if(timeleft == 5 || timeleft == 4 ||timeleft == 3||timeleft == 2||timeleft == 1){
                                                            	 for (Player playing: Bukkit.getServer().getOnlinePlayers())
                                                                 {
