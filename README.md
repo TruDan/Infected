@@ -13,6 +13,7 @@ a zombie is to infect all the humans before the timer is up.
 
 
 Features
+------------------
 
 Saves inventory, armor, exp, levels and the player's last known spot
 Auto-starts when the required amount of players join the lobby
@@ -32,7 +33,8 @@ Zombie abilities (Give your zombies a fighting chance)
 Optional addons
 
 
-
+Add-ons
+------------------
 If you'd like to enhance your gameplay experience, there are currently two addons available for Infected. 
 The first one is DisguiseCraft. This plugin has the ability to disguise infected players, well, as actual zombies! 
 If you're going to be using this, please be sure to install ProtocolLib and enable DisguiseCraft Support in the config 
